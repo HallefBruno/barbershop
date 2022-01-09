@@ -1,0 +1,2 @@
+ALTER TABLE cliente_sistema
+DROP CONSTRAINT cliente_sistema_pasta_key;

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cadastro de cliente</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <th:block th:replace="fragments/CssFragments :: css"></th:block>
+</head>
+<div th:replace="fragments/NavBar :: navbar"></div>
+<body style="background:#f3f3f3;">
+  <main class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2 mt-2">
+        <form th:action="@{/usuario}" method="post" th:object="${usuario}" enctype="multipart/form-data">
+          <th:block th:include="fragments/MensagemSucesso"></th:block>
+          <th:block th:include="fragments/MensagemErro"></th:block>
+          <div class="shadow p-3 mb-5 bg-body rounded">
+            <div class="card mb-3">
+              <h5 class="card-header">Cadastro de usuário</h5>
+              <div class="card-body">
+                <div class="text-center">
+                  <img id="image-viewer" width="110px" height="110px" th:src="@{/vendor/imagens/avatar-default.jpg}" style="border-radius: 50%;" alt="Cliente"/>
+                </div>
+                <div class="text-center">
+                  <div class="col-md-4 offset-md-4">
+                    <input type="file" required="true" class="mt-1 form-control form-control-sm" name="image" id="image" accept="image/png,image/jpeg"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-8">
+                    <label for="nome" class="form-label">Nome *</label>
+                    <div class="input-group mb-3">
+                      <input th:field="*{nome}" type="text" class="form-control" id="nome" name="nome" autocomplete="off">
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="telefone" class="form-label">Telefone *</label>
+                    <div class="input-group mb-3">
+                      <input th:field="*{telefone}" type="text" class="form-control mascara-telefone" id="telefone" name="telefone" autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-8">
+                    <label for="email" class="form-label">Email *</label>
+                    <div class="input-group mb-3">
+                      <input required="true" maxlength="200" type="email" th:field="*{email}" class="form-control" id="email" name="email" autocomplete="off"/>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                    <label for="senha" class="form-label">Senha *</label>
+                    <div class="input-group mb-3">
+                      <input required="true" type="password" maxlength="8" minlength="8" th:field="*{senha}" class="form-control" id="senha" name="senha"/>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row align-items-center">
+
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-6">
+                    <label for="dataNascimento" class="form-label">Data nascimento *</label>
+                    <div class="input-group mb-3">
+                      <input required="true" type="date" th:field="*{dataNascimento}" class="form-control" id="dataNascimento" name="dataNascimento"/>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-2 mb-1">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="ativo" checked="true" name="ativo" th:checked="*{ativo}">
+                      <label class="form-check-label" for="ativo">Ativo?</label>
+                    </div>
+                  </div>
+
+                  <div sec:authorize="hasRole('ROLE_SUPER_USER')" class="col-sm-12 col-md-12 col-12 col-lg-4 mb-1">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="proprietario" name="proprietario" th:checked="*{proprietario}">
+                      <label class="form-check-label" for="proprietario">É proprietário?</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-6">
+                    <div class="callout-md">
+                      Cliente: <span th:text="${clienteSistema.nomeComercio}" class="form-label"></span>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-6">
+                    <div class="callout-md">
+                      CNPJ: <span th:text="${clienteSistema.cpfCnpj}"></span>
+                    </div>
+                  </div>
+                </div>
+                <!--              <p th:each="authority : ${#authentication.getAuthorities()}"
+                                 th:if="${authority.getAuthority().startsWith('ROLE_')}"
+                                 th:text="${authority.getAuthority().replaceFirst('ROLE_', '')}">
+                              </p>-->
+                <hr>
+                <div style="max-height: 200px; overflow-y: scroll;" id="divPermissoes" data-bs-toggle="tooltip" data-bs-placement="left">
+                  <th:block th:each="grupo : ${grupos}">
+                    <th:block th:if="${grupo.nome} != 'SuperUser'">
+                      <div class="checkbox-group">
+                        <div class="list-group-item border-0">
+                          <div class="d-flex w-100 justify-content-between">
+                            <div class="col-6">
+                              <label class="list-group-item border-0">
+                                <input class="form-check-input me-1" name="grupos" th:id="${grupo.id}" th:text="${grupo.nome}" th:field="*{grupos}" th:value="${grupo.id}" type="checkbox">
+                              </label>
+                            </div>
+                            <div class="col-6">
+                              <i class="fa fa-unlock-alt fa-lg mt-2" aria-hidden="true"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </th:block>
+                  </th:block>
+                </div>
+                <hr>
+                <div class="btn-group btn-group-sm mt-1" role="group" aria-label="">
+                  <button type="submit" class="btn btn-outline-dark">Cadastrar</button>
+                  <button type="button" class="btn btn-outline-dark">Pesquisar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+<th:block th:replace="fragments/JsFragments :: script"></th:block>
+<script>
+  $(function () {
+    $("#nome").focus();
+    $("input[name=image]").change(function () {
+      if (this.files && this.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#image-viewer').attr('src', e.target.result);
+        };
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+
+    $("form").submit(function () {
+      if ($('div.checkbox-group :checkbox:checked').length <= 0) {
+        var messagem = new Barbershop.Mensagem();
+        messagem.show('warning', 'Permissão é obrigatória!');
+        $("#divPermissoes").prop("title", "Selecione as permissões");
+        return false;
+      }
+    });
+  });
+</script>
+</body>
+</html>
+
+
+<!--<div class="callout callout-default">
+  <h4>Default Callout</h4>
+  This is a default callout.
+</div>
+
+<div class="callout callout-primary">
+  <h4>Primary Callout</h4>
+  This is a primary callout.
+</div>
+
+<div class="callout callout-success">
+  <h4>Success Callout</h4>
+  This is a success callout.
+</div>
+
+<div class="callout callout-info">
+  <h4>Info Callout</h4>
+  This is an info callout.
+</div>
+
+<div class="callout callout-warning">
+  <h4>Warning Callout</h4>
+  This is a warning callout.
+</div>
+
+<div class="callout callout-danger">
+  <h4>Danger Callout</h4>
+  This is a danger callout.
+</div>-->
+
+<!--<th:block th:each="grupo : ${grupos}">
+  <th:block th:if="${grupo.nome} != 'SuperUser'">
+    <p th:text="${grupo.nome}">Grupo</p>
+    <th:block th:each="permissao : ${grupo.permissoes}">
+      <div class="checkbox-group">
+        <div class="list-group-item border-0">
+          <div class="d-flex w-100 justify-content-between">
+            <div class="col-6">
+              <label class="list-group-item border-0">
+                <input class="form-check-input me-1" name="grupos" th:id="${grupo.id}" th:text="${permissao.nome}" th:field="*{grupos}" th:value="${grupo.id}" type="checkbox">
+              </label>
+            </div>
+            <div class="col-6">
+              <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </th:block>
+  </th:block>
+</th:block>-->

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nova conta</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="fragments/CssFragments :: css"></th:block>
+  </head>
+  <body class="bg-light">
+    <main>
+      <form th:action="@{/agendamento/salvar}" method="post" th:object="${cliente}" enctype="multipart/form-data">
+        <th:block th:include="fragments/MensagemSucessoTelasMenores"></th:block>
+        <th:block th:include="fragments/MensagemErro"></th:block>
+
+        <div class="col-md-4 offset-md-4 col-lg-4 offset-lg-4 col-xl-4 offset-xl-4 mt-3 mt-3"> <!-- col-md-6 col-sm-9 col-lg-6 offset-md-4 offset-sm-2 offset-lg-3-->
+          <div class="card">
+            <div class="card-header">
+              Cria sua conta para fazer seu agendamento
+            </div>
+
+            <div class="card-body">
+              <div class="text-center">
+                <img id="image-viewer" width="90px" height="90px" th:src="@{/vendor/imagens/avatar-default.jpg}" style="border-radius: 50%;" alt="Cliente"/>
+              </div>
+
+              <div class="col-md-6 offset-md-3 mb-4">
+                <input type="file" required="true" class="form-control form-control-sm mt-1" name="image" id="image" accept="image/png,image/jpeg"/>
+              </div>
+
+              <div class="mb-1 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <label for="nome" class="form-label">Nome completo</label>
+                <input th:field="*{nome}" type="text" class="form-control form-control-sm" id="nome" name="nome" required="true" autocomplete="off">
+              </div>
+
+              <div class="mb-1 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <label for="telefone" class="form-label">Telefone</label>
+                <input th:field="*{telefone}" type="text" class="form-control form-control-sm" id="telefone" name="telefone" required="true" autocomplete="off">
+              </div>
+              <div class="mb-1 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <label for="email" class="form-label">E-mail</label>
+                <input th:field="*{email}" type="email" class="form-control form-control-sm" id="email" name="email" required="true" autocomplete="off">
+              </div>
+              <button type="submit" class="btn btn-outline-dark btn-sm">Criar conta</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </main>
+  <th:block th:replace="fragments/JsFragments :: script"></th:block>
+  <script th:src="@{/app/js/conta/NovaConta.js}" type="text/javascript"></script>
+</body>
+</html>

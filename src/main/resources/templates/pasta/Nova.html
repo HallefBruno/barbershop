@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Importar fotos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <th:block th:replace="fragments/CssFragments :: css"></th:block>
+</head>
+<div th:replace="fragments/NavBar :: navbar"></div>
+<body style="background:#f3f3f3;">
+  <main class="container">
+    <div class="col-md-8 offset-md-2 mt-2">
+      <form th:action="@{/pasta}" th:object="${pasta}" method="post">
+        <th:block th:include="fragments/MensagemSucesso"></th:block>
+        <th:block th:include="fragments/MensagemErro"></th:block>
+        <div class="shadow p-3 mb-5 bg-body rounded">
+          <div class="card">
+            <h5 class="card-header">Cadastro de pasta</h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-12">
+                  <label for="nome" class="form-label">Nome</label>
+                  <input required="true" th:field="*{nome}" type="text" class="form-control" id="nome" name="nome">
+                </div>
+              </div>
+
+              <div class="btn-group mt-2" role="group" aria-label="">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                  Salvar
+                </button>
+              </div>
+              
+              <div style="overflow-y:scroll; height: 350px;">
+                <div class="table-responsive">
+                  <table id="tbPastasdb" class="table table-bordered caption-top mt-4" style="width: 100%">
+                    <caption>Lista de pastas db</caption>
+                    <thead>
+                      <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th class="text-center">Local</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="pasta : ${listaPasta}">
+                        <td th:text="${pasta.id}">Id</td>
+                        <td th:text="${pasta.nome}">Nome</td>
+                        <td class="text-center"><span><i class="fa fa-database" aria-hidden="true"></i></span></td>
+                      </tr>
+                      <tr th:if="${#lists.isEmpty(listaPasta)}">
+                        <td colspan="3">Nenhuma pasta encontrada</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <hr>
+
+                <div class="table-responsive">
+                  <table id="tbPastasNuvem" class="table table-bordered caption-top mt-4" style="width: 100%">
+                    <caption>Lista de pastas nuvem</caption>
+                    <thead>
+                      <tr>
+                        <th>Nome</th>
+                        <th class="text-center">Local</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="nuvem : ${listaPastaNuvem}">
+                        <td th:text="${nuvem.name}">Nome</td>
+                        <td class="text-center"><span><i class="fa fa-cloud-upload" aria-hidden="true"></i></span></td>
+                      </tr>
+                      <tr th:if="${#lists.isEmpty(listaPastaNuvem)}">
+                        <td colspan="1">Nenhuma pasta encontrada</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+  <th:block th:replace="fragments/JsFragments :: script"></th:block>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Novo cliente sistema</title>
+    <th:block th:replace="fragments/CssFragments :: css"></th:block>
+  </head>
+  <div th:replace="fragments/NavBar :: navbar"></div>
+  <body style="background:#f3f3f3;">
+    <main class="container">
+      <form th:action="@{/cliente-sistema/salvar}" method="post" th:object="${clienteSistema}">
+        <th:block th:include="fragments/MensagemSucesso"></th:block>
+        <th:block th:include="fragments/MensagemErro"></th:block>
+        <div class="shadow p-3 mb-5 bg-body rounded">
+          <div class="card">
+            <h5 class="card-header">Cadastro de novo cliente no sistema</h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                  <label for="nomeComercio" class="form-label">Nome do comercio</label>
+                  <input required="true" th:field="*{nomeComercio}" type="text" class="form-control" id="nomeComercio" name="nomeComercio">
+                </div>
+                
+                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                  <label for="telefone" class="form-label">Telefone</label>
+                  <input required="true" th:field="*{telefone}" type="text" class="form-control mascara-telefone" id="telefone" name="telefone">
+                </div>
+                
+                <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
+                  <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
+                  <input minlength="14" required="true" th:field="*{cpfCnpj}" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                  <label for="estado" class="form-label">Estado</label>
+                  <div class="input-group mb-3">
+                    <input required="true" type="text" th:field="*{estado}" min="0" class="form-control" id="estado" name="estado"/>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                  <label for="cidade" class="form-label">Cidade</label>
+                  <div class="input-group mb-3">
+                    <input required="true" type="text" th:field="*{cidade}" class="form-control" id="cidade" name="cidade"/>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                  <label for="bairro" class="form-label">Bairro</label>
+                  <div class="input-group mb-3">
+                    <input required="true" type="text" th:field="*{bairro}" class="form-control" id="bairro" name="bairro"/>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                  <label for="cep" class="form-label">CEP</label>
+                  <div class="input-group mb-3">
+                    <input required="true" type="text" th:field="*{cep}" class="form-control cep" id="cep" name="cep"/>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                  <label for="logradouro" class="form-label">Logradouro</label>
+                  <div class="input-group mb-3">
+                    <input required="true" type="text" th:field="*{logradouro}" class="form-control" id="logradouro" name="logradouro"/>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                  <label for="qtdUsuario" class="form-label">Quantidade usuário</label>
+                  <div class="input-group mb-3">
+                    <input required="true" type="number" min="1" th:field="*{qtdUsuario}" class="form-control" id="qtdUsuario" name="qtdUsuario"/>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-12 col-lg-6 mb-3">
+                  <label for="negocio" class="form-label">Negócio</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa fa-briefcase" aria-hidden="true"></i></span>
+                    <select required th:field="*{negocio}" id="negocio" name="negocio" class="form-control">
+                      <option value=""></option>
+                      <option th:each="negocio : ${listNegocios}" th:value="${negocio.nome}" th:text="${negocio.nome}"></option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="col-sm-12 col-md-12 col-12 col-lg-6 mb-3">
+                  <label for="pastaPrincipal" class="form-label">Pasta principal</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa fa-folder-open" aria-hidden="true"></i></span>
+                    <select required th:field="*{pastaPrincipal}" id="pastaPrincipal" name="pastaPrincipal" class="form-control">
+                      <option value=""></option>
+                      <option th:each="pasta : ${listFolders}" th:value="${pasta.path}" th:text="${pasta.path}"></option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-12 col-lg-6 mb-3">
+                  <label for="pastaCatalago" class="form-label">Pasta catálago</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa fa-bullhorn" aria-hidden="true"></i></span>
+                    <input required="true" type="text" min="3" th:field="*{pastaCatalago}" class="form-control" id="pastaCatalago" name="pastaCatalago"/>
+                  </div>
+                </div>
+                
+                <div class="col-sm-12 col-md-12 col-12 col-lg-6 mb-3">
+                  <label for="pastaImagensUsuarioSistema" class="form-label">Pasta imagens usuário sistema</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa fa-user-circle" aria-hidden="true"></i></span>
+                    <input required="true" type="text" min="3" th:field="*{pastaImagensUsuarioSistema}" class="form-control" id="pastaImagensUsuarioSistema" name="pastaImagensUsuarioSistema"/>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row mb-3">
+                <div class="col-sm-12 col-md-12 col-12 col-lg-2 mb-1">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="ativo" name="ativo" th:checked="*{ativo}">
+                    <label class="form-check-label" for="ativo">Ativo?</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="btn-group mt-2" role="group" aria-label="">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                  Salvar
+                </button>
+                <a type="button" th:href="@{/clienteSistema/pesquisar}" class="btn btn-sm btn-outline-secondary">
+                  Pesquisar
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </main>
+    <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/jquery-3.6.0.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/jquery.mask.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/select2.full.min.js}" type="text/javascript"></script>
+    <script th:src="@{/app/script/clientesistema/Novo.js}" type="text/javascript"></script>
+  </body>
+</html>

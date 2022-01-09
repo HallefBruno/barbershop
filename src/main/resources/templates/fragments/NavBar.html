@@ -1,0 +1,59 @@
+<header th:fragment="navbar" style="margin-bottom: 70px;">
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+
+          <li class="nav-item">
+            <a class="nav-link active" th:href="@{/dashboard}" style=" padding-bottom: 0px; padding-right: 0px; padding-top: 5px; padding-left: 0px;">
+              <div class="icon-container" data-bs-toggle="tooltip" data-bs-placement="top" title="Cliente">
+                <img class="img-profile" th:src="@{/vendor/imagens/profile-default.png}" />
+                <div class="status-circle"></div>
+                <!--<p class="limit-text-profile">Cliete</p>-->
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" th:href="@{/dashboard}">Nome do comercio</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Cadastros
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" th:href="@{/cliente-sistema/novo}">Cliente sistema</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/usuario}">Usuário</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Cliente</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/login-cliente}">Login Cliente</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/novo-agendamento}">Agendamento</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/pasta}">Gestão de pasta</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Fotos
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" th:href="@{/importar-fotos}">Importar Fotos</a></li>
+            </ul>
+          </li>
+        </ul>
+        <div class="d-flex" title="Sair">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/logout}"><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

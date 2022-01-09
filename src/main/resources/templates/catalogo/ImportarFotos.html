@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Importar fotos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <th:block th:replace="fragments/CssFragments :: css"></th:block>
+</head>
+<div th:replace="fragments/NavBar :: navbar"></div>
+<body style="background:#f3f3f3;">
+  <main class="container">
+    <form th:action="@{/importar-fotos}" method="post" enctype="multipart/form-data">
+      <div class="shadow p-3 mb-5 bg-body rounded">
+        <div class="card">
+          <h5 class="card-header">Importar fotos</h5>
+          <div class="card-body">
+            <div class="text-center">
+              <img id="image-viewer" width="180px" height="180px" th:src="@{/vendor/imagens/avatar-default.jpg}" style="border-radius: 50%;" alt="Cliente"/>
+            </div>
+            <div class="text-center">
+              <div class="col-md-4 offset-md-4">
+                <input type="file" required="true" class="mt-1 form-control form-control-sm" name="image" id="image" accept="image/png,image/jpeg"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-12 col-12 col-lg-6">
+                <div class="callout-md callout-primary">
+                  Cliente: <span th:text="${clienteSistema.nomeComercio}" class="form-label"></span>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-12 col-12 col-lg-6">
+                <div class="callout-md callout-primary">
+                  CNPJ: <span th:text="${clienteSistema.cpfCnpj}"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-group mt-2" role="group" aria-label="">
+              <button type="submit" class="btn btn-sm btn-outline-secondary">
+                Salvar
+              </button>
+            </div>
+
+            <table id="tbCandidato" class="table table-bordered caption-top mt-4" style="width: 100%">
+              <caption>Lista de fotos</caption>
+              <thead>
+                <tr>
+                  <th>CPF CNPJ</th>
+                  <th>Nome foto</th>
+                  <th>Extensão</th>
+                  <th class="text-center">Foto</th>
+                  <th style="text-align: center; width: 100px;">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="foto : ${listaFotos}">
+                  <td th:text="${foto.cpfCnpj}">CPF CNPJ</td>
+                  <td th:text="${foto.nomeFoto}">Nome foto</td>
+                  <td th:text="${foto.extensao}">Extensão</td>
+                  <td class="text-center">
+                    <a title="Visualizar foto" target="_blank" th:src="@{https://res.cloudinary.com/sud/image/upload/{pastaPrincipal}/{pastaUsuario}/{pastaCatalago}/{nomeFoto} (pastaPrincipal=${clienteSistema.pastaPrincipal}, pastaCatalago=${clienteSistema.pastaCatalago}, pastaUsuario=${foto.cpfCnpj}, nomeFoto=${foto.nomeFoto})}">
+                      <img width="35px" height="35px" style="border-radius: 50%;" th:src="@{https://res.cloudinary.com/sud/image/upload/{pastaPrincipal}/{pastaUsuario}/{pastaCatalago}/{nomeFoto} (pastaPrincipal=${clienteSistema.pastaPrincipal}, pastaCatalago=${clienteSistema.pastaCatalago}, pastaUsuario=${foto.cpfCnpj}, nomeFoto=${foto.nomeFoto})}" />
+                    </a>
+                  </td>
+                  <td style="text-align: center;">
+                    <a title="Excluir" data:url="@{/importar-fotos/{codigo}(codigo=${foto.id})}" data:objeto="${fot.nome}" class="btn btn-danger btn-sm js-exclusao-btn">
+                      <span><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+                    </a>
+                    <a title="Editar" th:href="@{/importar-fotos/{codigo}(codigo=${foto.id})}" class="btn btn-info btn-sm text-white">
+                      <span><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                    </a>
+                  </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(listaFotos)}">
+                  <td colspan="4">Nenhuma foto encontrada</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+  <th:block th:replace="fragments/JsFragments :: script"></th:block>
+  <script th:src="@{/app/script/importarfotos/ImportarFotos.js}" type="text/javascript"></script>
+  </body>
+</html>

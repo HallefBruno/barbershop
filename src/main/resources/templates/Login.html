@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title>Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 offset-md-4 mt-4">
+          <div class="login-form bg-light p-4 shadow">
+            <div  th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+              Usuário ou senha inválidos, após três tentativas e falhas você será bloquado por 5 minutos
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <form class="row g-3" th:action="@{/login}" method="post">
+              <h4 class="text-center">Bem vindo a Barber Shop</h4>
+              <div class="col-12">
+                <label for="username">Email</label>
+                <input required type="email" name="username" class="form-control" id="username" placeholder="Email">
+              </div>
+              <div class="col-12">
+                <label for="password">Senha</label>
+                <input required type="password" name="password" id="password" class="form-control" placeholder="Senha">
+              </div>
+              <div class="col-12">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="remember-me" id="rememberMe">
+                  <label class="form-check-label" for="rememberMe">Lembrar me</label>
+                </div>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-dark float-end">Login</button>
+              </div>
+            </form>
+            <hr class="mt-4">
+            <div class="col-12">
+              <p class="text-center">Não é cliente ainda? <a th:href="@{/validar}">Seja aqui</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script th:src="@{/vendor/js/jquery-3.6.0.min.js}" type="text/javascript"></script>
+  </body>
+</html>
