@@ -3,7 +3,6 @@ package com.barber.shop.controller;
 import com.barber.shop.exception.NegocioException;
 import com.barber.shop.model.Pasta;
 import com.barber.shop.service.PastaService;
-import com.barber.shop.util.StorageCloudnary;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

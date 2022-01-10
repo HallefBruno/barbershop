@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Validar CPF/CNPJ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/vendor/css/gifcss.css}" rel="stylesheet" type="text/css"/>
+    <style>
+      #footer{
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+      }
+      #top {
+        background-image: linear-gradient(180deg, #eee, #fff 100px, #fff);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="top" class="container-fluid py-3">
+      <header>
+        <div class="pricing-header p-1 pb-md-4 mx-auto text-center">
+          <h4 class="display-6 fw-normal">Validando seu CPF/CNPJ</h4>
+          <p class="fs-6 text-muted">Essa etapa é muito importante para que você crie sua conta na <span class="badge bg-info text-white">Alldrinks</span></p>
+        </div>
+      </header>
+    </div>
+    <input type="hidden" id="contextApp" th:value="@{/}" />
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 offset-md-3 mt-5">
+          <div class="shadow-sm mb-5 bg-body rounded">
+            <div class="card">
+              <div class="card-header">
+                Autenticação para a liberação da criação da conta
+              </div>
+              <div class="card-body">
+                <p class="card-text">Digite seu CPF ou CNPJ</p>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="cpfCnpj" placeholder="CPF/CNPJ" aria-label="CNPJ" aria-describedby="cnpj">
+                  <button class="btn btn-danger btnValidarClienteSistema" type="button" id="btnValidarClienteSistema" name="btnValidarClienteSistema"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer id="footer" class="footer mt-auto py-3 bg-light text-center">
+      <div class="container">
+        <span class="text-muted">© 2021 Copyright: SUDTECH Technologies 2021</span>
+      </div>
+    </footer>
+
+    <div id="divLoading"></div>
+    <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/jquery-3.6.0.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/jquery.mask.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/sweetalert2.all.js}" type="text/javascript"></script>
+    <script th:src="@{/novaconta/validar.cliente.sistema.js}" type="text/javascript"></script>
+  </body>
+</html>

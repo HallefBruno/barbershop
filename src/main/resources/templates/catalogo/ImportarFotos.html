@@ -9,13 +9,15 @@
 <div th:replace="fragments/NavBar :: navbar"></div>
 <body style="background:#f3f3f3;">
   <main class="container">
-    <form th:action="@{/importar-fotos}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/importar-fotos}" method="post" th:object="${foto}" enctype="multipart/form-data">
+      <th:block th:include="fragments/MensagemSucesso"></th:block>
+      <th:block th:include="fragments/MensagemErro"></th:block>
       <div class="shadow p-3 mb-5 bg-body rounded">
         <div class="card">
           <h5 class="card-header">Importar fotos</h5>
           <div class="card-body">
             <div class="text-center">
-              <img id="image-viewer" width="180px" height="180px" th:src="@{/vendor/imagens/avatar-default.jpg}" style="border-radius: 50%;" alt="Cliente"/>
+              <img class="mb-3" id="image-viewer" width="180px" height="180px" th:src="@{/vendor/imagens/{fotoPerfil} (fotoPerfil=${clienteSistema.imagePerfilCatalogo})}" style="border-radius: 50%;" alt="Cliente"/>
             </div>
             <div class="text-center">
               <div class="col-md-4 offset-md-4">
@@ -40,43 +42,40 @@
                 Salvar
               </button>
             </div>
-
-            <table id="tbCandidato" class="table table-bordered caption-top mt-4" style="width: 100%">
-              <caption>Lista de fotos</caption>
-              <thead>
-                <tr>
-                  <th>CPF CNPJ</th>
-                  <th>Nome foto</th>
-                  <th>Extensão</th>
-                  <th class="text-center">Foto</th>
-                  <th style="text-align: center; width: 100px;">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr th:each="foto : ${listaFotos}">
-                  <td th:text="${foto.cpfCnpj}">CPF CNPJ</td>
-                  <td th:text="${foto.nomeFoto}">Nome foto</td>
-                  <td th:text="${foto.extensao}">Extensão</td>
-                  <td class="text-center">
-                    <a title="Visualizar foto" target="_blank" th:src="@{https://res.cloudinary.com/sud/image/upload/{pastaPrincipal}/{pastaUsuario}/{pastaCatalago}/{nomeFoto} (pastaPrincipal=${clienteSistema.pastaPrincipal}, pastaCatalago=${clienteSistema.pastaCatalago}, pastaUsuario=${foto.cpfCnpj}, nomeFoto=${foto.nomeFoto})}">
-                      <img width="35px" height="35px" style="border-radius: 50%;" th:src="@{https://res.cloudinary.com/sud/image/upload/{pastaPrincipal}/{pastaUsuario}/{pastaCatalago}/{nomeFoto} (pastaPrincipal=${clienteSistema.pastaPrincipal}, pastaCatalago=${clienteSistema.pastaCatalago}, pastaUsuario=${foto.cpfCnpj}, nomeFoto=${foto.nomeFoto})}" />
-                    </a>
-                  </td>
-                  <td style="text-align: center;">
-                    <a title="Excluir" data:url="@{/importar-fotos/{codigo}(codigo=${foto.id})}" data:objeto="${fot.nome}" class="btn btn-danger btn-sm js-exclusao-btn">
-                      <span><i class="fa fa-trash-o" aria-hidden="true"></i></span>
-                    </a>
-                    <a title="Editar" th:href="@{/importar-fotos/{codigo}(codigo=${foto.id})}" class="btn btn-info btn-sm text-white">
-                      <span><i class="fa fa-pencil" aria-hidden="true"></i></span>
-                    </a>
-                  </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(listaFotos)}">
-                  <td colspan="4">Nenhuma foto encontrada</td>
-                </tr>
-              </tbody>
-            </table>
-
+            <div class="table-responsive">
+              <table id="tbCandidato" class="table table-bordered caption-top mt-4" style="width: 100%">
+                <caption>Lista de fotos</caption>
+                <thead>
+                  <tr>
+                    <th>CPF CNPJ</th>
+                    <th>Nome foto</th>
+                    <th>Extensão</th>
+                    <th class="text-center">Foto</th>
+                    <th style="text-align: center; width: 100px;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="foto : ${listaFotos}">
+                    <td th:text="${foto.cpfCnpj}">CPF CNPJ</td>
+                    <td th:text="${foto.nomeFoto}">Nome foto</td>
+                    <td th:text="${foto.extensao}">Extensão</td>
+                    <td class="text-center">
+                      <a title="Visualizar foto" data-bs-toggle="tooltip" data-bs-placement="top" target="_blank" th:href="@{https://res.cloudinary.com/sud/image/upload/{pastaPrincipal}/{pastaUsuario}/{pastaCatalago}/{nomeFoto} (pastaPrincipal=${clienteSistema.pastaPrincipal}, pastaCatalago=${clienteSistema.pastaCatalago}, pastaUsuario=${foto.cpfCnpj}, nomeFoto=${foto.nomeFoto})}">
+                        <img width="35px" height="35px" style="border-radius: 50%;" th:src="@{https://res.cloudinary.com/sud/image/upload/{pastaPrincipal}/{pastaUsuario}/{pastaCatalago}/{nomeFoto} (pastaPrincipal=${clienteSistema.pastaPrincipal}, pastaCatalago=${clienteSistema.pastaCatalago}, pastaUsuario=${foto.cpfCnpj}, nomeFoto=${foto.nomeFoto})}" />
+                      </a>
+                    </td>
+                    <td style="text-align: center;">
+                      <a title="Excluir" data-bs-toggle="tooltip" data-bs-placement="top" data:url="@{/importar-fotos/{codigo}(codigo=${foto.id})}" data:objeto="${foto.nomeFoto}" class="btn btn-danger btn-sm js-exclusao-btn">
+                        <span><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr th:if="${#lists.isEmpty(listaFotos)}">
+                    <td colspan="5">Nenhuma foto encontrada</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

@@ -43,17 +43,12 @@ public class ExceptionController {
         return new ModelAndView("Error");
     }
     
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ModelAndView badRequestError(Exception ex, final Model model, HttpServletRequest request) {
+        String servPath = request.getServletPath();
+        model.addAttribute("errorMessage", ex.getMessage());
+        model.addAttribute("path", servPath);
+        return new ModelAndView("Error");
+    }
 }
-//@ExceptionHandler(Exception.class)
-//        @ResponseStatus(HttpStatus.BAD_REQUEST)
-//        public ModelAndView badRequestError(Exception ex, final Model model, HttpServletRequest request) {
-//        String servPath = request.getServletPath();
-//        //String redirect = servPath.substring(0,servPath.indexOf("/",2));
-//        String msg = ex.getLocalizedMessage();
-//        if(ex instanceof DataIntegrityViolationException) {
-//            msg = ((DataIntegrityViolationException) ex).getMostSpecificCause().getMessage();
-//        }
-//        model.addAttribute("errorMessage", msg);
-//        model.addAttribute("path", servPath);
-//        return new ModelAndView("Error");
-//    }

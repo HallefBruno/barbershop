@@ -23,7 +23,7 @@
                 
                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                   <label for="telefone" class="form-label">Telefone</label>
-                  <input required="true" th:field="*{telefone}" type="text" class="form-control mascara-telefone" id="telefone" name="telefone">
+                  <input minlength="13" required="true" th:field="*{telefone}" type="text" class="form-control mascara-telefone" id="telefone" name="telefone">
                 </div>
                 
                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
@@ -115,11 +115,53 @@
                 </div>
               </div>
               
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-12 col-lg-6 mb-3">
+                  <label for="imagePerfilCatalogo" class="form-label">Imagem perfil catálogo</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa fa-bullhorn" aria-hidden="true"></i></span>
+                    <select required th:field="*{imagePerfilCatalogo}" id="imagePerfilCatalogo" name="imagePerfilCatalogo" class="form-control">
+                      <option value=""></option>
+                      <option th:each="imagePerfilCatalogo : ${imagensSistema}" data:context="@{/}" th:with="extensao=${imagePerfilCatalogo.extensao}" th:value="${imagePerfilCatalogo.nome}+'.'+${extensao}" th:text="${imagePerfilCatalogo.nome}"></option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="col-sm-12 col-md-12 col-12 col-lg-6 mb-3">
+                  <label for="imagemPerfilCadastroUsuario" class="form-label">Imagem perfil cadastro usuário</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fa fa-user-circle" aria-hidden="true"></i></span>
+                    <select required th:field="*{imagemPerfilCadastroUsuario}" id="imagemPerfilCadastroUsuario" name="imagemPerfilCadastroUsuario" class="form-control">
+                      <option value=""></option>
+                      <option th:each="imagemPerfilCadastroUsuario : ${imagensSistema}" data:context="@{/}" th:with="extensao=${imagemPerfilCadastroUsuario.extensao}" th:value="${imagemPerfilCadastroUsuario.nome}+'.'+${extensao}" th:text="${imagemPerfilCadastroUsuario.nome}"></option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
               <div class="row mb-3">
-                <div class="col-sm-12 col-md-12 col-12 col-lg-2 mb-1">
-                  <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="ativo" name="ativo" th:checked="*{ativo}">
-                    <label class="form-check-label" for="ativo">Ativo?</label>
+                <div class="col-sm-12 col-md-12 col-12 col-lg-12">
+                  <div class="callout-md callout-danger">
+                    <div class="col-sm-12 col-md-12 col-12 col-lg-2 mb-1">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="ativo" name="ativo" th:checked="*{ativo}">
+                        <label class="form-check-label" for="ativo">Ativo?</label>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-12 col-12 col-lg-3 mb-1">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="acessarTelaCriarLogin" name="acessarTelaCriarLogin" th:checked="*{acessarTelaCriarLogin}">
+                        <label class="form-check-label" for="acessarTelaCriarLogin">Acessar tela criar login?</label>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-12 col-12 col-lg-3 mb-1">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="primeiroAcesso" name="primeiroAcessoativo" th:checked="*{primeiroAcesso}">
+                        <label class="form-check-label" for="primeiroAcesso">Primeiro acesso?</label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

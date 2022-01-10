@@ -103,6 +103,18 @@ public class ClienteSistema implements Serializable {
     @Column(nullable = false, length = 150)
     private String pastaImagensUsuarioSistema;
     
+    @NotBlank(message = "Imagem do perfil catalogo não pode ter espaços em branco!")
+    @NotEmpty(message = "Imagem do perfil catalogo não pode ser vazio!")
+    @NotNull(message = "Imagem do perfil catalogo não pode ser null!")
+    @Column(nullable = false, length = 150)
+    private String imagePerfilCatalogo;
+    
+    @NotBlank(message = "Imagem perfil usuario não pode ter espaços em branco!")
+    @NotEmpty(message = "Imagem perfil usuario não pode ser vazio!")
+    @NotNull(message = "Imagem perfil usuario não pode ser null!")
+    @Column(nullable = false, length = 150)
+    private String imagemPerfilCadastroUsuario;
+    
     @NotBlank(message = "Negocio não pode ter espaços em branco!")
     @NotEmpty(message = "Negocio não pode ser vazio!")
     @NotNull(message = "Negocio não pode ser null!")
@@ -115,6 +127,12 @@ public class ClienteSistema implements Serializable {
     
     @Column(nullable = false)
     private Boolean ativo;
+    
+    @Column(name = "acessar_tela_criar_login", columnDefinition = "boolean default false")
+    private Boolean acessarTelaCriarLogin;
+    
+    @Column(name = "primeiro_acesso", columnDefinition = "boolean default false")
+    private Boolean primeiroAcesso;
     
     @PrePersist
     private void prePersist() {
@@ -137,6 +155,8 @@ public class ClienteSistema implements Serializable {
         this.estado = StringUtils.strip(this.estado);
         this.pastaPrincipal = StringUtils.strip(this.pastaPrincipal);
         this.pastaCatalago = StringUtils.strip(this.pastaCatalago);
+        this.imagePerfilCatalogo = StringUtils.strip(this.imagePerfilCatalogo);
+        this.imagemPerfilCadastroUsuario = StringUtils.strip(this.imagemPerfilCadastroUsuario);
         this.pastaImagensUsuarioSistema = StringUtils.strip(this.pastaImagensUsuarioSistema);
         this.negocio = StringUtils.strip(this.negocio);
         this.nomeComercio = StringUtils.strip(this.nomeComercio);
@@ -144,7 +164,16 @@ public class ClienteSistema implements Serializable {
         this.cep = StringUtils.getDigits(this.cep);
         this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
         this.telefone = StringUtils.getDigits(this.telefone);
-        if(this.ativo == null) this.ativo = false;
+        
+        if(Objects.isNull(this.ativo)) {
+            this.ativo = false;
+        }
+        if(Objects.isNull(this.acessarTelaCriarLogin)) {
+            this.acessarTelaCriarLogin = Boolean.FALSE;
+        }
+        if(Objects.isNull(this.primeiroAcesso)) {
+            this.primeiroAcesso = Boolean.FALSE;
+        }
     }
 }
 

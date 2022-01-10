@@ -1,0 +1,6 @@
+ALTER TABLE cliente_sistema
+ADD COLUMN IF NOT EXISTS acessar_tela_criar_login BOOLEAN DEFAULT FALSE;
+
+
+ALTER TABLE cliente_sistema
+ADD COLUMN IF NOT EXISTS primeiro_acesso BOOLEAN DEFAULT FALSE;

@@ -3,6 +3,7 @@ package com.barber.shop.controller;
 
 import com.barber.shop.exception.NegocioException;
 import com.barber.shop.model.ClienteSistema;
+import com.barber.shop.repository.ImagensSistemaRepository;
 import com.barber.shop.service.ClienteSistemaService;
 import com.barber.shop.service.NegocioService;
 import com.barber.shop.util.StorageCloudnary;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ClienteSistemaController {
     
     private final ClienteSistemaService clienteSistemaService;
+    private final ImagensSistemaRepository imagensSistemaRepository;
     private final NegocioService negocioService;
     private final StorageCloudnary storageCloudnary;
     
@@ -33,6 +35,7 @@ public class ClienteSistemaController {
         mv.addObject("clienteSistema", clienteSistema);
         mv.addObject("listNegocios", negocioService.todos());
         mv.addObject("listFolders", storageCloudnary.getFoldersCloudnary());
+        mv.addObject("imagensSistema", imagensSistemaRepository.findAll());
         return mv;
     }
     
@@ -49,7 +52,7 @@ public class ClienteSistemaController {
             result.addError(error);
             return index(clienteSistema);
         }
-        attributes.addFlashAttribute("mensagem", "Novo clinete cadastrado!");
+        attributes.addFlashAttribute("mensagem", "Novo cliente cadastrado!");
         return new ModelAndView("redirect:/cliente-sistema/novo", HttpStatus.CREATED);
     }
     

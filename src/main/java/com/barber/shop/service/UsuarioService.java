@@ -5,7 +5,6 @@ import com.barber.shop.model.Usuario;
 import com.barber.shop.repository.UsuarioRepository;
 import com.barber.shop.security.UsuarioSistema;
 import com.barber.shop.util.StorageCloudnary;
-import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;

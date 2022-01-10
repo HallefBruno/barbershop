@@ -1,6 +1,7 @@
 
 package com.barber.shop.service;
 
+import com.barber.shop.exception.NegocioException;
 import com.barber.shop.model.Foto;
 import com.barber.shop.repository.ImportarFotosRepository;
 import com.barber.shop.util.StorageCloudnary;
@@ -25,18 +26,36 @@ public class ImportarFotosService {
     
     @Transactional
     public void salvar(MultipartFile multipartFile) {
+        String cpfCnpj = usuarioService.getUsuarioLogado().getClienteSistema().getCpfCnpj();
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
         Foto foto = new Foto();
+        foto.setCpfCnpj(cpfCnpj);
         foto.setNomeFoto(fileName.substring(0, fileName.lastIndexOf(".")));
         foto.setExtensao(extension);
-        foto.setCpfCnpj(usuarioService.getUsuarioLogado().getClienteSistema().getCpfCnpj());
         try {
+            importarFotosRepository.findByNomeFotoIgnoreCase(foto.getNomeFoto()).ifPresent((t) -> {
+                throw new NegocioException(HttpStatus.BAD_REQUEST, "Essa foto já consta na base de dados!");
+            });
             importarFotosRepository.save(foto);
-            storageCloudnary.uploadFoto(multipartFile.getBytes(), "fotos-cortes-cabelo/"+foto.getCpfCnpj()+"/"+foto.getNomeFoto());
+            storageCloudnary.uploadFotoCatalogo(multipartFile.getBytes(), foto.getNomeFoto());
         } catch (IOException ex) {
-            storageCloudnary.deleteFoto("fotos-cortes-cabelo/"+foto.getCpfCnpj()+"/"+foto.getNomeFoto());
+            storageCloudnary.deleteFotoCatalogo(foto.getNomeFoto());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+        }
+    }
+    
+    @Transactional
+    public void excluir(Long id) {
+        try {
+            importarFotosRepository.findById(id)
+            .map(foto -> {
+                importarFotosRepository.deleteByNomeFotoIgnoreCase(foto.getNomeFoto());
+                storageCloudnary.deleteFotoCatalogo(foto.getNomeFoto());
+                return Void.TYPE;
+            }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        } catch (NegocioException ex) {
+            throw new NegocioException(HttpStatus.BAD_REQUEST, ex.getReason());
         }
     }
     
