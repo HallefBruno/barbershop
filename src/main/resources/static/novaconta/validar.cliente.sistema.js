@@ -23,6 +23,9 @@ $(function () {
             if (xhr.responseJSON) {
               $("#cpfCnpj").focus();
               Swal.fire('Atenção!',`${xhr.responseJSON.message}`,'warning');
+            } else if(xhr.responseText) {
+              $("#cpfCnpj").focus();
+              Swal.fire('Atenção!',`${xhr.responseText}`,'warning');
             }
             window.console.log(xhr);
           },

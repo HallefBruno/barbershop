@@ -26,7 +26,7 @@ public class ValidarClienteSistemaController {
     public @ResponseBody ResponseEntity<?> clienteCadastrado(@RequestParam(name = "cpfCnpj") String cpfCnpj) {
         try {
             validarClienteService.salvaValidarCliente(cpfCnpj);
-            return ResponseEntity.ok("novaConta");
+            return ResponseEntity.ok().body("novaConta");
         } catch (NegocioException ex) {
             return ResponseEntity.badRequest().body(ex.getReason());
         }

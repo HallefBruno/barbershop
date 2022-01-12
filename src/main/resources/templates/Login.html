@@ -16,8 +16,11 @@
               Usuário ou senha inválidos, após três tentativas e falhas você será bloquado por 5 minutos
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+            <div class="text-center mb-1">
+              <img width="30px" height="20px" th:src="@{/vendor/imagens/brasil-beauty.png}"/>
+            </div>
             <form class="row g-3" th:action="@{/login}" method="post">
-              <h4 class="text-center">Bem vindo a Barber Shop</h4>
+              <span style="font-size: 25px;" class="text-center">Bem vindo a <span class="text-success">Brasil</span> <span style="color: #e612bb">beauty</span> </span>
               <div class="col-12">
                 <label for="username">Email</label>
                 <input required type="email" name="username" class="form-control" id="username" placeholder="Email">
@@ -33,7 +36,7 @@
                 </div>
               </div>
               <div class="col-12">
-                <button type="submit" class="btn btn-dark float-end">Login</button>
+                <button type="submit" class="btn btn-outline-dark btn-sm float-end">Login</button>
               </div>
             </form>
             <hr class="mt-4">

@@ -14,13 +14,49 @@
   </head>
   <body class="bg-light" th:with="httpStatus=${T(org.springframework.http.HttpStatus).valueOf(#response.status)}">
     <div class="container mt-4">
-      <div class="shadow p-3 mb-5 bg-body rounded">
-        <h2 class="text text-muted mb-1">Ops... Desculpe por isso!</h2>
+      <div class="shadow p-3 mb-5 rounded">
+        <h3 class="text text-muted mb-2">Um erro ocorreu!</h3>
         <div class="alert alert-danger d-flex align-items-center" role="alert">
           <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
           <span th:text="${errorMessage}"></span>
+          <span th:text="${httpStatus}"></span>
         </div>
-        <a th:href="@{${path}}" class="btn btn-outline-secondary btn-sm">Voltar</a>
+        <div class="table-responsive">
+          <table class="table table-bordered caption-top">
+            <caption >Detalhes do erro</caption>
+            <tr>
+              <td>Date</td>
+              <td th:text="${#dates.format(timestamp, 'dd/MM/yyyy HH:mm:ss')}"/>
+            </tr>
+            <tr>
+              <td>Path</td>
+              <td th:text="${path}"/>
+            </tr>
+            <tr>
+              <td>Error</td>
+              <td th:text="${error}"/>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td th:text="${status}"/>
+            </tr>
+            <tr>
+              <td>Message</td>
+              <td><span style="font-family: Arial" th:text="${message}" class="badge bg-danger fs-6"></span></td>
+            </tr>
+            <tr>
+              <td>Exception</td>
+              <td th:text="${exception}"/>
+            </tr>
+            <tr>
+              <td>Trace</td>
+              <td>
+                <pre th:text="${trace}"/>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <a th:href="@{${path}}" th:if="${status ne 401}" class="btn btn-outline-secondary btn-sm mt-1">Voltar</a>
       </div>
     </div>
     <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
