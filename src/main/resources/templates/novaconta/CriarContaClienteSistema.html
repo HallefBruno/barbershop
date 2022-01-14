@@ -24,9 +24,9 @@
     </style>
   </head>
   <body>
-    <div id="top" class="container-fluid py-3">
+    <div id="top" class="container-fluid ">
       <header>
-        <div class="pricing-header p-1 pb-md-4 mx-auto text-center">
+        <div class="pricing-header pb-md-4 mx-auto text-center">
           <h4 class="display-6 fw-normal">Reta final <i class="fa fa-flag-checkered" aria-hidden="true"></i></h4>
           <p class="fs-6 text-muted">Defina um e-mail e senha de acesso e pronto!</p>
         </div>
@@ -36,62 +36,75 @@
     <input type="hidden" id="contextApp" th:value="@{/}" />
     <div class="container">
       <div class="row">
-        <div class="col-md-6 offset-md-3 mt-2">
+        <div class="col-md-6 offset-md-3">
           <div class="shadow-sm mb-5 bg-body rounded">
             <div class="card">
               <div class="card-header">
                 Criar conta
               </div>
               <div class="card-body">
-                <div class="row">
-                  <div class="mb-3">
-                    <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
-                    <input type="text" readonly="true" class="form-control" id="cpfCnpj" name="cpfCnpj">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="mb-3">
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
-                      <input type="email" class="form-control" id="email" name="email">
+                <form th:action="@{/criar/nova-conta}" method="post" th:object="${usuarioDTO}">
+                  <div class="row">
+                    <div class="mb-3">
+                      <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
+                      <input type="text" readonly="true" class="form-control" id="cpfCnpj" name="cpfCnpj">
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="d-flex">
-                    <div class="flex-grow-1 mb-3">
+                  <div class="row">
+                    <div class="mb-3">
                       <div class="input-group">
-                        <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
-                        <input type="password" class="form-control" id="password" name="password">
+                        <span class="input-group-text"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
+                        <input type="email" th:field="*{email}" placeholder="email" class="form-control" id="email" autocomplete="off" autofocus="true" name="email" required>
                       </div>
                     </div>
-                    <div class="p-2">
-                      <span data-bs-toggle="popover" title="Como deve ser a sua senha" data-bs-content="A senha deve conter 5 digitos '00000', uma letra, 'A' outro digito '0' e outra letra 'A' ex: '00000S0S' "><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                  </div>
+                  <div class="row" id="pwd-container">
+                    <div class="d-flex">
+                      <div class="flex-grow-1 mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
+                          <input type="password" th:field="*{password}" maxlength="11" minlength="11" placeholder="Senha" class="form-control" autocomplete="off" id="password" name="password" required>
+                        </div>
+                      </div>
+                      <div class="p-2">
+                        <span data-bs-toggle="popover" title="Como deve ser a sua senha" data-bs-content="A senha deve conter 11 digitos, precisa ter: 'Digitos, letras e caracteres especiais.' ex:12345678Bf* "><i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i></span>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <div class="input-group">
+                        <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
+                        <input type="password" th:field="*{confirmPassword}" placeholder="Confirmar senha" class="form-control" id="confirmPassword" autocomplete="off" autofocus="true" name="confirmPassword" required>
+                      </div>
+                    </div>
+                    <div class="col-sm">
+                      <div class="pwstrength_viewport_progress"></div>
                     </div>
                   </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <button type="button" class="btn btn-sm btn-outline-secondary btnCriarConta">
-                    Salvar
-                  </button>
-                </div>
+                  
+                  <div class="d-flex justify-content-between align-items-center mt-2 float-end">
+                    <button type="submit" id="btnCriarConta" disabled="true" class="btn btn-sm btn-outline-secondary">
+                      Criar conta
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <footer id="footer" class="footer mt-auto py-3 bg-light text-center">
+<!--    <footer id="footer" class="footer mt-auto py-3 bg-light text-center">
       <div class="container">
         <span class="text-muted">© 2021 Copyright: SUDTECH Technologies 2021</span>
       </div>
-    </footer>
+    </footer>-->
 
     <div id="divLoading"></div>
     <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
     <script th:src="@{/vendor/js/jquery-3.6.0.min.js}" type="text/javascript"></script>
     <script th:src="@{/vendor/js/jquery.mask.min.js}" type="text/javascript"></script>
     <script th:src="@{/vendor/js/sweetalert2.all.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/pwstrength-bootstrap.min.js}" type="text/javascript"></script>
     <script th:src="@{/novaconta/nova.conta.cliente.js}" type="text/javascript"></script>
   </body>
 </html>

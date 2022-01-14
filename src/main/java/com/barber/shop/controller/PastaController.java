@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/pasta")
 @RequiredArgsConstructor
 public class PastaController {
-    
+
     private final PastaService pastaService;
 
     @GetMapping
@@ -42,7 +42,7 @@ public class PastaController {
         }
         attributes.addFlashAttribute("mensagem", "Nova pasta cadastrada!");
         return new ModelAndView("redirect:/pasta", HttpStatus.CREATED);
-        
+
     }
 
 }

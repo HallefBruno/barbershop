@@ -166,7 +166,7 @@ public class ClienteSistema implements Serializable {
         this.telefone = StringUtils.getDigits(this.telefone);
         
         if(Objects.isNull(this.ativo)) {
-            this.ativo = false;
+            this.ativo = Boolean.FALSE;
         }
         if(Objects.isNull(this.acessarTelaCriarLogin)) {
             this.acessarTelaCriarLogin = Boolean.FALSE;
