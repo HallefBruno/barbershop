@@ -49,11 +49,11 @@ $(function () {
     if (submmit === false || senhaPrincipal.val() !== senhaSecundaria.val()) {
       Swal.fire('Atenção!', 'As senhas não conferem!', 'warning');
       $("form").submit(function () {
-        return false;
+        event.preventDefault();
       });
-    } else {
-      $("form").submit();
+      return;
     }
+    $("form").submit();
   });
   
   $("#confirmPassword").keyup(function () {
