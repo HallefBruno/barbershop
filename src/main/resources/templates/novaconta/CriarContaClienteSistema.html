@@ -37,11 +37,9 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 offset-md-2">
-          <div class="shadow-sm mb-5 bg-body rounded">
+          <div class="shadow p-3 mb-5 bg-body rounded">
             <div class="card">
-              <div class="card-header">
-                Criar conta
-              </div>
+              <h5 class="card-header">Criar conta</h5>
               <div class="card-body">
                 <form th:action="@{/criar/nova-conta}" method="post" th:object="${usuario}" enctype="multipart/form-data">
                   <div class="text-center mb-3">

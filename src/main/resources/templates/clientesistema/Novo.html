@@ -18,17 +18,17 @@
               <div class="row">
                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                   <label for="nomeComercio" class="form-label">Nome do comercio</label>
-                  <input required="true" th:field="*{nomeComercio}" type="text" class="form-control" id="nomeComercio" name="nomeComercio">
+                  <input autocomplete="off" required="true" th:field="*{nomeComercio}" type="text" class="form-control" id="nomeComercio" name="nomeComercio">
                 </div>
                 
                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                   <label for="telefone" class="form-label">Telefone</label>
-                  <input minlength="13" required="true" th:field="*{telefone}" type="text" class="form-control mascara-telefone" id="telefone" name="telefone">
+                  <input autocomplete="off" minlength="13" required="true" th:field="*{telefone}" type="text" class="form-control mascara-telefone" id="telefone" name="telefone">
                 </div>
                 
                 <div class="mb-3 col-sm-12 col-md-12 col-12 col-lg-4">
                   <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
-                  <input minlength="14" required="true" th:field="*{cpfCnpj}" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj">
+                  <input autocomplete="off" minlength="14" required="true" th:field="*{cpfCnpj}" type="text" class="form-control mascara-cpf-cnpj" id="cpfCnpj" name="cpfCnpj">
                 </div>
               </div>
 
@@ -36,19 +36,19 @@
                 <div class="col-sm-12 col-md-12 col-12 col-lg-4">
                   <label for="estado" class="form-label">Estado</label>
                   <div class="input-group mb-3">
-                    <input required="true" type="text" th:field="*{estado}" min="0" class="form-control" id="estado" name="estado"/>
+                    <input autocomplete="off" required="true" type="text" th:field="*{estado}" min="0" class="form-control" id="estado" name="estado"/>
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-12 col-lg-4">
                   <label for="cidade" class="form-label">Cidade</label>
                   <div class="input-group mb-3">
-                    <input required="true" type="text" th:field="*{cidade}" class="form-control" id="cidade" name="cidade"/>
+                    <input autocomplete="off" required="true" type="text" th:field="*{cidade}" class="form-control" id="cidade" name="cidade"/>
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-12 col-lg-4">
                   <label for="bairro" class="form-label">Bairro</label>
                   <div class="input-group mb-3">
-                    <input required="true" type="text" th:field="*{bairro}" class="form-control" id="bairro" name="bairro"/>
+                    <input autocomplete="off" required="true" type="text" th:field="*{bairro}" class="form-control" id="bairro" name="bairro"/>
                   </div>
                 </div>
               </div>
@@ -56,19 +56,19 @@
                 <div class="col-sm-12 col-md-12 col-12 col-lg-4">
                   <label for="cep" class="form-label">CEP</label>
                   <div class="input-group mb-3">
-                    <input required="true" type="text" th:field="*{cep}" class="form-control cep" id="cep" name="cep"/>
+                    <input autocomplete="off" required="true" type="text" th:field="*{cep}" class="form-control cep" id="cep" name="cep"/>
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-12 col-lg-4">
                   <label for="logradouro" class="form-label">Logradouro</label>
                   <div class="input-group mb-3">
-                    <input required="true" type="text" th:field="*{logradouro}" class="form-control" id="logradouro" name="logradouro"/>
+                    <input autocomplete="off" required="true" type="text" th:field="*{logradouro}" class="form-control" id="logradouro" name="logradouro"/>
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-12 col-lg-4">
                   <label for="qtdUsuario" class="form-label">Quantidade usuário</label>
                   <div class="input-group mb-3">
-                    <input required="true" type="number" min="1" th:field="*{qtdUsuario}" class="form-control" id="qtdUsuario" name="qtdUsuario"/>
+                    <input autocomplete="off" required="true" type="number" min="1" th:field="*{qtdUsuario}" class="form-control" id="qtdUsuario" name="qtdUsuario"/>
                   </div>
                 </div>
               </div>

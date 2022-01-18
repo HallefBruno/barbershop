@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Cadastro de cliente</title>
+    <title>Cadastro de usuário</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <th:block th:replace="fragments/CssFragments :: css"></th:block>
@@ -74,7 +74,7 @@
                     </div>
                   </div>
 
-                  <div sec:authorize="hasRole('ROLE_SUPER_USER')" class="col-sm-12 col-md-12 col-12 col-lg-4 mb-1">
+                  <div class="col-sm-12 col-md-12 col-12 col-lg-4 mb-1">
                     <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="proprietario" name="proprietario" th:checked="*{proprietario}">
                       <label class="form-check-label" for="proprietario">É proprietário?</label>
@@ -94,10 +94,7 @@
                     </div>
                   </div>
                 </div>
-                <!--              <p th:each="authority : ${#authentication.getAuthorities()}"
-                                 th:if="${authority.getAuthority().startsWith('ROLE_')}"
-                                 th:text="${authority.getAuthority().replaceFirst('ROLE_', '')}">
-                              </p>-->
+
                 <hr>
                 <div style="max-height: 200px; overflow-y: scroll;" id="divPermissoes" data-bs-toggle="tooltip" data-bs-placement="left">
                   <th:block th:each="grupo : ${grupos}">
@@ -157,56 +154,3 @@
 </script>
 </body>
 </html>
-
-
-<!--<div class="callout callout-default">
-  <h4>Default Callout</h4>
-  This is a default callout.
-</div>
-
-<div class="callout callout-primary">
-  <h4>Primary Callout</h4>
-  This is a primary callout.
-</div>
-
-<div class="callout callout-success">
-  <h4>Success Callout</h4>
-  This is a success callout.
-</div>
-
-<div class="callout callout-info">
-  <h4>Info Callout</h4>
-  This is an info callout.
-</div>
-
-<div class="callout callout-warning">
-  <h4>Warning Callout</h4>
-  This is a warning callout.
-</div>
-
-<div class="callout callout-danger">
-  <h4>Danger Callout</h4>
-  This is a danger callout.
-</div>-->
-
-<!--<th:block th:each="grupo : ${grupos}">
-  <th:block th:if="${grupo.nome} != 'SuperUser'">
-    <p th:text="${grupo.nome}">Grupo</p>
-    <th:block th:each="permissao : ${grupo.permissoes}">
-      <div class="checkbox-group">
-        <div class="list-group-item border-0">
-          <div class="d-flex w-100 justify-content-between">
-            <div class="col-6">
-              <label class="list-group-item border-0">
-                <input class="form-check-input me-1" name="grupos" th:id="${grupo.id}" th:text="${permissao.nome}" th:field="*{grupos}" th:value="${grupo.id}" type="checkbox">
-              </label>
-            </div>
-            <div class="col-6">
-              <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </th:block>
-  </th:block>
-</th:block>-->

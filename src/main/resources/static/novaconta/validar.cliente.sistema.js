@@ -30,10 +30,10 @@ $(function () {
             window.console.log(xhr);
           },
           beforeSend: function () {
-            $("#divLoading").addClass("loading");
+            $("#divLoading").addClass("submitting");
           },
           complete: function () {
-            $("#divLoading").removeClass("loading");
+            $("#divLoading").removeClass("submitting");
           }
         });
       } else {

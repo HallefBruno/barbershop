@@ -34,7 +34,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-            .antMatchers("/vendor/**");
+            .antMatchers("/vendor/**")
+            .antMatchers("/novaconta/**");
     }
 
     @Override
@@ -45,6 +46,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/show/**").permitAll()
                 .antMatchers("/login-cliente/**").permitAll()
                 .antMatchers("/novo-agendamento/**").permitAll()
+                .antMatchers("/validar/**").permitAll()
+                .antMatchers("/novaConta/**").permitAll()
+                .antMatchers("/criar/nova-conta/**").permitAll()
+                .antMatchers("/conta-criada/**").permitAll()
         .and()
             .authorizeRequests()
                 .antMatchers("/dashboard/**").hasRole("DASHBOARD")
@@ -62,6 +67,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .invalidateHttpSession(true)
         .and()
             .sessionManagement()
+                .maximumSessions(1).sessionRegistry(sessionRegistry())
+                .expiredUrl("/login")
+                .and()
             .invalidSessionUrl("/login")
         .and()
             .exceptionHandling().accessDeniedHandler(accessDeniedHandler())

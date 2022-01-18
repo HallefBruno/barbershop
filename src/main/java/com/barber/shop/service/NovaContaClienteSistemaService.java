@@ -76,30 +76,31 @@ public class NovaContaClienteSistemaService {
         usuario.setCpfCnpj(StringUtils.getDigits(usuario.getCpfCnpj()));
         Optional<ClienteSistema> clienteSistemaOptional = clienteSistemaRepository.findByCpfCnpj(usuario.getCpfCnpj());
         clienteSistemaOptional.map(clienteSistema -> {
-            if(criarConta(clienteSistema)) {
-                if(Objects.isNull(multipartFile)) {
-                    throw new NegocioException(HttpStatus.BAD_REQUEST,"É necessário selecionar a foto!");
-                }
-                usuarioRepository.findByEmailAndClienteSistema(usuario.getEmail(), clienteSistema).ifPresent((u) -> {
-                    throw new NegocioException(HttpStatus.BAD_REQUEST,"Já existe um usuário com esse e-mail!");
-                });
-                try {
-                    String fileName = org.springframework.util.StringUtils.cleanPath(multipartFile.getOriginalFilename());
-                    String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-                    usuario.setNomeFoto(UUID.randomUUID().toString());
-                    usuario.setTelefone(StringUtils.getDigits(usuario.getTelefone()));
-                    usuario.setExtensao(extension);
-                    usuario.setClienteSistema(clienteSistema);
-                    usuario.setAtivo(Boolean.TRUE);
-                    usuario.setProprietario(Boolean.TRUE);
-                    usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-                    usuario.setGrupos(getGrupos());
-                    usuarioRepository.save(usuario);
-                    storageCloudnary.uploadFoto(multipartFile.getBytes(), usuario.getClienteSistema().getPastaPrincipal().concat("/").concat(usuario.getCpfCnpj()).concat("/").concat(usuario.getClienteSistema().getPastaImagensUsuarioSistema()));
-                } catch (IOException ex) {
-                    log.error(ex.getMessage());
-                    throw new NegocioException(HttpStatus.BAD_REQUEST,"Não foi possível fazer o upload da imagem!");
-                }
+            if(BooleanUtils.isFalse(criarConta(clienteSistema))) {
+                throw new NegocioException(HttpStatus.BAD_REQUEST,"Você está sem permissão para criar a conta!");
+            }
+            if(Objects.isNull(multipartFile)) {
+                throw new NegocioException(HttpStatus.BAD_REQUEST,"É necessário selecionar a foto!");
+            }
+            usuarioRepository.findByEmailAndClienteSistema(usuario.getEmail(), clienteSistema).ifPresent((u) -> {
+                throw new NegocioException(HttpStatus.BAD_REQUEST,"Já existe um usuário com esse e-mail!");
+            });
+            try {
+                String fileName = org.springframework.util.StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+                usuario.setNomeFoto(UUID.randomUUID().toString());
+                usuario.setTelefone(StringUtils.getDigits(usuario.getTelefone()));
+                usuario.setExtensao(extension);
+                usuario.setClienteSistema(clienteSistema);
+                usuario.setAtivo(Boolean.TRUE);
+                usuario.setProprietario(Boolean.TRUE);
+                usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+                usuario.setGrupos(getGrupos());
+                usuarioRepository.save(usuario);
+                storageCloudnary.uploadFoto(multipartFile.getBytes(), usuario.getClienteSistema().getPastaPrincipal().concat("/").concat(usuario.getCpfCnpj()).concat("/").concat(usuario.getClienteSistema().getPastaImagensUsuarioSistema()));
+            } catch (IOException ex) {
+                log.error(ex.getMessage());
+                throw new NegocioException(HttpStatus.BAD_REQUEST,"Não foi possível fazer o upload da imagem!");
             }
             return Void.TYPE;
         }).orElseThrow(() -> new NegocioException(HttpStatus.NOT_FOUND,"Nenhum cliente cadastrado com esse CPF/CNPJ!"));
