@@ -72,7 +72,7 @@ public class StorageCloudnary {
 
     public void uploadFoto(byte[] dataImage,String folder) {
         try {
-            Map conf = ObjectUtils.asMap(PUBLIC_ID, rootFolder.concat("/").concat(folder));
+            Map conf = ObjectUtils.asMap(PUBLIC_ID, folder);
             Singleton.getCloudinary().uploader().upload(dataImage, conf);
         } catch (IOException ex) {
             throw new NegocioException(HttpStatus.INTERNAL_SERVER_ERROR,ex.getLocalizedMessage());

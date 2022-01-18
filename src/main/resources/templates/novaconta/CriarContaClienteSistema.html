@@ -11,15 +11,15 @@
     <link th:href="@{/vendor/css/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
     <link th:href="@{/vendor/css/gifcss.css}" rel="stylesheet" type="text/css"/>
     <style>
-      #footer{
-          position: fixed;
-          left: 0;
-          bottom: 0;
-          width: 100%;
-          text-align: center;
-      }
+      /*      #footer{
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+            }*/
       #top {
-          background-image: linear-gradient(180deg, #eee, #fff 100px, #fff);
+          background-image: linear-gradient(180deg, #eee, #fff 110px, #fff);
       }
     </style>
   </head>
@@ -36,51 +36,87 @@
     <input type="hidden" id="contextApp" th:value="@{/}" />
     <div class="container">
       <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-8 offset-md-2">
           <div class="shadow-sm mb-5 bg-body rounded">
             <div class="card">
               <div class="card-header">
                 Criar conta
               </div>
               <div class="card-body">
-                <form th:action="@{/criar/nova-conta}" method="post" th:object="${usuarioDTO}">
-                  <div class="row">
-                    <div class="mb-3">
-                      <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
-                      <input type="text" readonly="true" class="form-control" id="cpfCnpj" name="cpfCnpj">
+                <form th:action="@{/criar/nova-conta}" method="post" th:object="${usuario}" enctype="multipart/form-data">
+                  <div class="text-center mb-3">
+                    <img id="image-viewer" width="110px" height="110px" th:src="@{/vendor/imagens/avatar-default.jpg}" style="border-radius: 50%;" alt="Cliente"/>
+                  </div>
+                  
+                  <div class="text-center mb-3">
+                    <div class="col-md-6 offset-md-3">
+                      <input type="file" required="true" class="mt-1 form-control form-control-sm" name="image" id="image" accept="image/png,image/jpeg"/>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="mb-3">
-                      <div class="input-group">
-                        <span class="input-group-text"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
-                        <input type="email" th:field="*{email}" placeholder="email" class="form-control" id="email" autocomplete="off" autofocus="true" name="email" required>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12 col-md-12 col-12 col-lg-6">
+                      <label for="cpfCnpj" class="form-label">CPF/CNPJ</label>
+                      <input type="text" th:field="*{cpfCnpj}" readonly="true" class="form-control" id="cpfCnpj" name="cpfCnpj" required>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-12 col-lg-6">
+                      <label for="nome" class="form-label">Nome *</label>
+                      <div class="input-group mb-3">
+                        <input th:field="*{nome}" type="text" class="form-control" id="nome" name="nome" autocomplete="off" autofocus="true" required>
                       </div>
                     </div>
                   </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                      <label for="email" class="form-label">Email *</label>
+                      <div class="input-group mb-3">
+                        <input required="true" maxlength="200" type="email" th:field="*{email}" class="form-control" id="email" name="email" autocomplete="off"/>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                      <label for="telefone" class="form-label">Telefone *</label>
+                      <div class="input-group mb-3">
+                        <input th:field="*{telefone}" type="text" class="form-control mascara-telefone" id="telefone" name="telefone" autocomplete="off" required>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-12 col-lg-4">
+                      <label for="dataNascimento" class="form-label">Data nascimento *</label>
+                      <div class="input-group mb-3">
+                        <input required="true" type="date" th:field="*{dataNascimento}" class="form-control" id="dataNascimento" name="dataNascimento"/>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="row" id="pwd-container">
-                    <div class="d-flex">
-                      <div class="flex-grow-1 mb-3">
-                        <div class="input-group">
-                          <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
-                          <input type="password" th:field="*{password}" maxlength="11" minlength="11" placeholder="Senha" class="form-control" autocomplete="off" id="password" name="password" required>
+                    <div class="col-sm-12 col-md-12 col-12 col-lg-6">
+                      <label for="senha" class="form-label">Senha *</label>
+                      <div class="d-flex">
+                        <div class="flex-grow-1 mb-3">
+                          <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
+                            <input type="password" th:field="*{senha}" maxlength="11" minlength="11" placeholder="Senha" class="form-control" autocomplete="off" id="senha" name="senha" required>
+                          </div>
+                        </div>
+                        <div class="p-2">
+                          <span data-bs-toggle="popover" title="Como deve ser a sua senha" data-bs-content="A senha deve conter 11 digitos, precisa ter: 'Digitos, letras e caracteres especiais.' ex:12345678Bf* "><i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i></span>
                         </div>
                       </div>
-                      <div class="p-2">
-                        <span data-bs-toggle="popover" title="Como deve ser a sua senha" data-bs-content="A senha deve conter 11 digitos, precisa ter: 'Digitos, letras e caracteres especiais.' ex:12345678Bf* "><i class="fa fa-exclamation-triangle text-danger" aria-hidden="true"></i></span>
-                      </div>
                     </div>
-                    <div class="mb-3">
-                      <div class="input-group">
-                        <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
-                        <input type="password" th:field="*{confirmPassword}" maxlength="11" minlength="11" placeholder="Confirmar senha" class="form-control" id="confirmPassword" autocomplete="off" autofocus="true" name="confirmPassword" required>
+                    <div class="col-sm-12 col-md-12 col-12 col-lg-6">
+                      <label for="confirmaSenha" class="form-label">Confirmar senha *</label>
+                      <div class="mb-3">
+                        <div class="input-group">
+                          <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
+                          <input type="password" th:field="*{confirmaSenha}" maxlength="11" minlength="11" placeholder="Confirmar senha" class="form-control" id="confirmaSenha" autocomplete="off" name="confirmaSenha" required>
+                        </div>
                       </div>
                     </div>
                     <div class="col-sm">
                       <div class="pwstrength_viewport_progress"></div>
                     </div>
                   </div>
-                  
+
                   <div class="d-flex justify-content-between align-items-center mt-2 float-end">
                     <button type="submit" id="btnCriarConta" disabled="true" class="btn btn-sm btn-outline-secondary">
                       Criar conta
@@ -93,11 +129,11 @@
         </div>
       </div>
     </div>
-<!--    <footer id="footer" class="footer mt-auto py-3 bg-light text-center">
-      <div class="container">
-        <span class="text-muted">© 2021 Copyright: SUDTECH Technologies 2021</span>
-      </div>
-    </footer>-->
+    <!--    <footer id="footer" class="footer mt-auto py-3 bg-light text-center">
+          <div class="container">
+            <span class="text-muted">© 2021 Copyright: SUDTECH Technologies 2021</span>
+          </div>
+        </footer>-->
 
     <div id="divLoading"></div>
     <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>

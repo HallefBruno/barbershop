@@ -16,17 +16,22 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @Entity
+@DynamicUpdate
+@EqualsAndHashCode
 public class Usuario implements Serializable {
     
     @Id
@@ -58,7 +63,19 @@ public class Usuario implements Serializable {
     @Column(nullable = false, length = 100)
     private String senha;
     
-    @Column(nullable = false)
+    @Transient
+    @NotBlank(message = "Confirmar senha não pode ter espaços em branco!")
+    @NotEmpty(message = "Confirmar senha não pode ser vazio!")
+    @NotNull(message = "Confirmar senha não pode ser null!")
+    private String confirmaSenha;
+    
+    @Transient
+    @NotBlank(message = "CPF CNPJ não pode ter espaços em branco!")
+    @NotEmpty(message = "CPF CNPJ não pode ser vazio!")
+    @NotNull(message = "CPF CNPJ não pode ser null!")
+    private String cpfCnpj;
+    
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean ativo;
 
     @Size(min = 1, message = "Selecione pelo menos um grupo")
@@ -74,9 +91,8 @@ public class Usuario implements Serializable {
     @DateTimeFormat(pattern="yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE)
     private LocalDate dataNascimento;
     
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean proprietario;
-    
     
     @Column(nullable = false, name = "nome_foto", unique = true)
     private String nomeFoto;

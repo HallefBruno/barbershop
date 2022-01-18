@@ -25,6 +25,9 @@ public class Foto implements Serializable {
     @Column(nullable = false, name = "nome_foto", unique = true, length = 100)
     private String nomeFoto;
     
+    @Column(nullable = false, name = "original_name", length = 200)
+    private String originalName;
+    
     @Column(nullable = false, length = 20, name = "cpf_cnpj")
     private String cpfCnpj;
     

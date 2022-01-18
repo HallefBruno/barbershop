@@ -7,6 +7,7 @@ import com.barber.shop.repository.ImportarFotosRepository;
 import com.barber.shop.util.StorageCloudnary;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
@@ -27,11 +28,12 @@ public class ImportarFotosService {
     @Transactional
     public void salvar(MultipartFile multipartFile) {
         String cpfCnpj = usuarioService.getUsuarioLogado().getClienteSistema().getCpfCnpj();
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        String originalName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
         Foto foto = new Foto();
         foto.setCpfCnpj(cpfCnpj);
-        foto.setNomeFoto(fileName.substring(0, fileName.lastIndexOf(".")));
+        foto.setNomeFoto(UUID.randomUUID().toString());
+        foto.setOriginalName(originalName.substring(0, originalName.lastIndexOf(".")));
         foto.setExtensao(extension);
         try {
             importarFotosRepository.findByNomeFotoIgnoreCase(foto.getNomeFoto()).ifPresent((t) -> {

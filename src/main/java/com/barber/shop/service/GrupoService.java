@@ -12,7 +12,7 @@ public class GrupoService {
     
     private final GrupoRepository grupoRepository;
     
-    public List<Grupo> gupos() {
+    public List<Grupo> grupos() {
         return grupoRepository.findAll();
     }
     

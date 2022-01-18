@@ -148,10 +148,10 @@ Barbershop.LoadGif = (function () {
   function LoadGif() {}
   LoadGif.prototype.enable = function () {
     $(document).ajaxSend(function (event, jqxhr, settings) {
-      $("#divLoading").addClass("loading");
+      $("#divLoading").addClass("submitting");
     }.bind(this));
     $(document).ajaxComplete(function (event, jqxhr, settings) {
-      $("#divLoading").removeClass("loading");
+      $("#divLoading").removeClass("submitting");
     }.bind(this));
   };
   return LoadGif;
@@ -187,9 +187,7 @@ Barbershop.Mensagem = (function () {
 
 
 Barbershop.RemoveMask = (function () {
-
   function RemoveMask() {}
-
   RemoveMask.prototype.remover = function (value) {
     if (value.length >= 8) {
       value = value.replace(/[^0-9.-]+/g, "");
@@ -203,11 +201,48 @@ Barbershop.RemoveMask = (function () {
   return RemoveMask;
 }());
 
+
+Barbershop.CreateDivLoading = (function () {
+  function CreateDivLoading() {}
+  CreateDivLoading.prototype.init = function () {
+    $("body").after("<div id='divLoading'></div>");
+  };
+  return CreateDivLoading;
+}());
+
+Barbershop.ShowDivLoadClickSubmit = (function () {
+  function ShowDivLoadClickSubmit() {}
+  ShowDivLoadClickSubmit.prototype.init = function () {
+    
+    $('a').click(function (e) {
+      if (!$(this).is("#navbarDropdown")) {
+        $("#divLoading").addClass("loading");
+      }
+    });
+    
+    $("button[type='submit']").click(function (e) {
+      if (!$("form").get(0).checkValidity()) {
+        $("#divLoading").removeClass("submitting");
+      } else {
+        $("#divLoading").addClass("submitting");
+      }
+    });
+  };
+  return ShowDivLoadClickSubmit;
+}());
+
+
 $(function () {
   
   $('[data-bs-toggle="popover"]').popover();
   $('[data-bs-toggle="tooltip"]').tooltip();
-
+  
+  var createDiv = new Barbershop.CreateDivLoading();
+  createDiv.init();
+  
+  var showDivLoading = new Barbershop.ShowDivLoadClickSubmit();
+  showDivLoading.init();
+  
   var dialogo = new Barbershop.DialogoExcluir();
   dialogo.iniciar();
 
@@ -228,6 +263,5 @@ $(function () {
 
   var maskPhone = new Barbershop.MaskPhoneNumber();
   maskPhone.enable();
-
 
 });

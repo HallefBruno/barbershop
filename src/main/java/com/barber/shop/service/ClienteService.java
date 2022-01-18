@@ -3,7 +3,7 @@ package com.barber.shop.service;
 import com.barber.shop.model.Usuario;
 import com.barber.shop.repository.ClienteRepository;
 import com.barber.shop.util.StorageCloudnary;
-import java.io.IOException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ public class ClienteService {
         String nomeArquivo = "";
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        cliente.setNomeFoto(fileName.substring(0, fileName.lastIndexOf(".")));
+        cliente.setNomeFoto(UUID.randomUUID().toString());
         cliente.setExtensao(extension);
         Usuario novo = clienteRepository.save(cliente);
         nomeArquivo =  novo.getId().toString()+"-"+cliente.getNomeFoto();

@@ -12,12 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class ExceptionController {
-    
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView  dataIntegrityViolationException(Exception ex, final Model model, HttpServletRequest request) {
+    public ModelAndView dataIntegrityViolationException(Exception ex, Model model, HttpServletRequest request) {
         String servPath = request.getServletPath();
-        String redirect = servPath.substring(0,servPath.indexOf("/",2));
+        String redirect = servPath.substring(0, servPath.indexOf("/", 2));
         String msg = ((DataIntegrityViolationException) ex).getMostSpecificCause().getMessage();
         model.addAttribute("errorMessage", msg);
         model.addAttribute("path", redirect);
@@ -25,7 +25,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ModelAndView handleResponseStatusException(ResponseStatusException ex,Model model,HttpServletRequest request) {
+    public ModelAndView handleResponseStatusException(ResponseStatusException ex, Model model, HttpServletRequest request) {
         String messageError = ex.getReason();
         String servPath = request.getServletPath();
         model.addAttribute("errorMessage", messageError);
@@ -35,17 +35,17 @@ public class ExceptionController {
 
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ModelAndView nullPointerException(Model model,HttpServletRequest request) {
+    public ModelAndView nullPointerException(Model model, HttpServletRequest request) {
         String servPath = request.getServletPath();
-        String redirect = servPath.substring(0,servPath.indexOf("/",2));
+        String redirect = servPath.substring(0, servPath.indexOf("/", 2));
         model.addAttribute("errorMessage", "Erro grave, por favor entrar em contato com admin do sistema!");
         model.addAttribute("path", redirect);
         return new ModelAndView("Error");
     }
-    
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ModelAndView badRequestError(Exception ex, final Model model, HttpServletRequest request) {
+    public ModelAndView badRequestError(Exception ex, Model model, HttpServletRequest request) {
         String servPath = request.getServletPath();
         model.addAttribute("errorMessage", ex.getMessage());
         model.addAttribute("path", servPath);

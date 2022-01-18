@@ -7,8 +7,19 @@ $(function () {
   var cpfCnpj = localStorage.getItem("cpfCnpj");
   var inputCpfCnpj = $("#cpfCnpj");
   var contextApp = $("#contextApp");
-  var senhaPrincipal = $("#password");
-  var senhaSecundaria = $("#confirmPassword");
+  var senhaPrincipal = $("#senha");
+  var senhaSecundaria = $("#confirmaSenha");
+  mascaraTelefone();
+  
+  $("input[name=image]").change(function () {
+    if (this.files && this.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $('#image-viewer').attr('src', e.target.result);
+      };
+      reader.readAsDataURL(this.files[0]);
+    }
+  });
   
   if (cpfCnpj) {
     inputCpfCnpj.val(atob(cpfCnpj));
@@ -35,10 +46,10 @@ $(function () {
         }
       },
       beforeSend: function () {
-        $("#divLoading").addClass("loading");
+        $("#divLoading").addClass("submitting");
       },
       complete: function () {
-        $("#divLoading").removeClass("loading");
+        $("#divLoading").removeClass("submitting");
       }
     });
   } else {
@@ -53,10 +64,14 @@ $(function () {
       });
       return;
     }
-    $("form").submit();
+    if (!$("form").get(0).checkValidity()) {
+      $("#divLoading").removeClass("submitting");
+    } else {
+      $("#divLoading").addClass("submitting");
+    }
   });
-  
-  $("#confirmPassword").keyup(function () {
+
+  $("#confirmaSenha").keyup(function () {
     if(senhaPrincipal.val() === senhaSecundaria.val()) {
       $("#btnCriarConta").attr("disabled", false);
       $("#btnCriarConta").removeClass();
@@ -102,7 +117,7 @@ $(function () {
     }
   };
 
-  $('#password').pwstrength(options);
+  $('#senha').pwstrength(options);
 
   $('[data-bs-toggle="popover"]').popover();
 });
@@ -120,6 +135,18 @@ function alert() {
     } else {
       window.location.href = $("#contextApp").val() + 'validar';
     }
-    $("#divLoading").removeClass("loading");
+    $("#divLoading").removeClass("submitting");
   });
+}
+
+function mascaraTelefone() {
+  var maskBehavior = function (val) {
+    return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+  };
+  var options = {
+    onKeyPress: function (val, e, field, options) {
+      field.mask(maskBehavior.apply({}, arguments), options);
+    }
+  };
+  $("#telefone").mask(maskBehavior, options);
 }

@@ -1,20 +1,22 @@
 package com.barber.shop.controller;
 
 import com.barber.shop.exception.NegocioException;
-import com.barber.shop.model.dto.UsuarioDTO;
-import com.barber.shop.service.NovaContaClienteSistema;
+import com.barber.shop.model.Usuario;
+import com.barber.shop.service.NovaContaClienteSistemaService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -22,7 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class ValidarClienteSistemaController {
 
-    private final NovaContaClienteSistema validarClienteService;
+    private final NovaContaClienteSistemaService validarClienteService;
 
     @RequestMapping(path = {"validar"}, method = RequestMethod.GET)
     public String pageValidarCliente() {
@@ -40,22 +42,23 @@ public class ValidarClienteSistemaController {
     }
 
     @RequestMapping(path = {"novaConta"}, method = RequestMethod.GET)
-    public String pageNovaConta(@ModelAttribute("usuarioDTO") UsuarioDTO usuarioDTO) {
+    public String pageNovaConta(@ModelAttribute("usuario") Usuario usuario) {
         return "novaconta/CriarContaClienteSistema";
     }
     
     @RequestMapping(path = {"criar/nova-conta"}, method = RequestMethod.POST)
-    public ModelAndView salvar(@Valid UsuarioDTO usuarioDTO, BindingResult result,RedirectAttributes attributes) {
+    public ModelAndView salvar(@RequestParam("image") MultipartFile multipartFile, @Valid Usuario usuario, BindingResult result,RedirectAttributes attributes) {
         try {
             if (result.hasErrors()) {
-                //return page(pasta);
+                pageNovaConta(usuario);
             }
-            //pastaService.salvar(pasta);
+            validarClienteService.criarPreContaUsuarioClienteSistema(multipartFile, usuario);
         } catch (NegocioException ex) {
-            result.rejectValue("nome", ex.getMessage(), ex.getReason());
-            //return page(pasta);
+            ObjectError error = new ObjectError("erro", ex.getReason());
+            result.addError(error);
+            pageNovaConta(usuario);
+            //result.rejectValue("nome", ex.getMessage(), ex.getReason());
         }
-        attributes.addFlashAttribute("mensagem", "Conta criada com sucesso!");
-        return new ModelAndView("redirect:/", HttpStatus.CREATED);
+        return new ModelAndView("redirect:/conta-criada", HttpStatus.CREATED).addObject("resultado","Conta criada com sucesso!");
     }
 }

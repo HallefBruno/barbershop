@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mensagem</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/vendor/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div class="container">
+      <div class="alert alert-success mt-5" role="alert">
+        <h4 class="alert-heading" th:text="${resultado}"></h4>
+        <p>Sua conta foi criada, para cessar o sistema, use o e-mail e a senha que definiu na criação da sua conta.</p>
+        <hr>
+        <p class="mb-0">Ao clicar no botão abaixo, você será redirecionado para a tela de login.</p>
+        <div class="row">
+          <div class="col-sm-2 mt-2">
+            <button type="button" class="btn btn-primary">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script th:src="@{/vendor/js/bootstrap.bundle.min.js}" type="text/javascript"></script>
+  <script type="text/javascript">
+    localStorage.clear();
+    var alertList = document.querySelectorAll('.alert');
+    alertList.forEach(function (alert) {
+      new bootstrap.Alert(alert);
+    });
+  </script>
+</html>
