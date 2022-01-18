@@ -215,6 +215,7 @@ Barbershop.ShowDivLoadClickSubmit = (function () {
   ShowDivLoadClickSubmit.prototype.init = function () {
     
     $('a').click(function (e) {
+      window.console.debug($(this));
       if (!$(this).is("#navbarDropdown")) {
         $("#divLoading").addClass("loading");
       }

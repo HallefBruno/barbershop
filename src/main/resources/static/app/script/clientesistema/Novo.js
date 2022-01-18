@@ -3,6 +3,30 @@ $(function () {
   $("#nomeComercio").focus();
 
   $("#cep").mask("00000-000");
+  
+  $("body").after("<div id='divLoading'></div>");
+  
+  $(document).ajaxSend(function (event, jqxhr, settings) {
+    $("#divLoading").addClass("submitting");
+  });
+  $(document).ajaxComplete(function (event, jqxhr, settings) {
+    $("#divLoading").removeClass("submitting");
+  });
+  
+  $('a').click(function (e) {
+    if (!$(this).is("#navbarDropdown")) {
+      $("#divLoading").addClass("loading");
+    }
+  });
+    
+  $("button[type='submit']").click(function (e) {
+    if (!$("form").get(0).checkValidity()) {
+      $("#divLoading").removeClass("submitting");
+    } else {
+      $("#divLoading").addClass("submitting");
+    }
+  });
+  
 
   $("#cep").focusout(function () {
     if ($("#cep").val()) {
@@ -29,11 +53,11 @@ $(function () {
   var cpfCnpjMaskBehavior = function (val) {
     return val.replace(/\D/g, '').length <= 11 ? '000.000.000-009' : '00.000.000/0000-00';
   },
-          cpfCnpjpOptions = {
-            onKeyPress: function (val, e, field, options) {
-              field.mask(cpfCnpjMaskBehavior.apply({}, arguments), options);
-            }
-          };
+  cpfCnpjpOptions = {
+    onKeyPress: function (val, e, field, options) {
+      field.mask(cpfCnpjMaskBehavior.apply({}, arguments), options);
+    }
+  };
 
   $("#cpfCnpj").mask(cpfCnpjMaskBehavior, cpfCnpjpOptions);
 
