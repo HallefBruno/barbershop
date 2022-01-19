@@ -13,9 +13,11 @@ import javax.persistence.PreUpdate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @Entity
+@DynamicUpdate
 @EqualsAndHashCode
 public class ValidarCliente implements Serializable {
 

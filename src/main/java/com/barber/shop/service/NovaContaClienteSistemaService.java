@@ -44,7 +44,7 @@ public class NovaContaClienteSistemaService {
     private final static String SUPER_USER = "SuperUser";
 
     @Transactional
-    public void salvaValidarCliente(String cpfCnpj) {
+    public void validarClienteSistema(String cpfCnpj) {
         Optional<ValidarCliente> temCnpj = clienteRepository.findByCpfCnpj(cpfCnpj);
         if (temCnpj.isPresent() && temCnpj.get().getContaCriada()) {
             throw new NegocioException(HttpStatus.BAD_REQUEST,"Esse cliente já possui conta!");
@@ -54,18 +54,18 @@ public class NovaContaClienteSistemaService {
     }
 
     private void verificaSeClienteEstaCadastrado(String cpfCnpj) {
-        Optional<ClienteSistema> opClienteSistema = clienteSistemaRepository.findByCpfCnpj(cpfCnpj);
-        if (opClienteSistema.isPresent()) {
-            ClienteSistema clienteSistema = opClienteSistema.get();
-            if (clienteSistema.getPrimeiroAcesso() && clienteSistema.getAcessarTelaCriarLogin()) {
-                ValidarCliente validarCliente = new ValidarCliente();
-                validarCliente.setCpfCnpj(cpfCnpj);
-                validarCliente.setDataValidacao(LocalDateTime.now());
-                clienteRepository.save(validarCliente);
-            }
-        } else {
-            throw new NegocioException(HttpStatus.BAD_REQUEST,"Cliente sem permisão para criar conta!");
-        }
+        clienteSistemaRepository.findByCpfCnpj(cpfCnpj)
+        .map(Optional::ofNullable).orElseThrow(() -> new NegocioException(HttpStatus.NOT_FOUND,"Nenhum cliente cadastrado com esse CPF/CNPJ!"))
+        .filter(c -> BooleanUtils.isTrue(c.getAcessarTelaCriarLogin()))
+        .filter(c -> BooleanUtils.isTrue(c.getAtivo()))
+        .filter(c -> BooleanUtils.isTrue(c.getPrimeiroAcesso()))
+        .map(cs -> {
+            ValidarCliente validarCliente = new ValidarCliente();
+            validarCliente.setCpfCnpj(cpfCnpj);
+            validarCliente.setDataValidacao(LocalDateTime.now());
+            clienteRepository.save(validarCliente);
+            return Void.TYPE;
+        }).orElseThrow(() -> new NegocioException(HttpStatus.NOT_FOUND,"Cliente sem permisão para criar conta!"));
     }
     
     @Transactional
@@ -86,6 +86,7 @@ public class NovaContaClienteSistemaService {
                 throw new NegocioException(HttpStatus.BAD_REQUEST,"Já existe um usuário com esse e-mail!");
             });
             try {
+                updateValidarCliente(usuario.getCpfCnpj());
                 String fileName = org.springframework.util.StringUtils.cleanPath(multipartFile.getOriginalFilename());
                 String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
                 usuario.setNomeFoto(UUID.randomUUID().toString());
@@ -99,7 +100,7 @@ public class NovaContaClienteSistemaService {
                 usuarioRepository.save(usuario);
                 storageCloudnary.uploadFoto(multipartFile.getBytes(), usuario.getClienteSistema().getPastaPrincipal().concat("/").concat(usuario.getCpfCnpj()).concat("/").concat(usuario.getClienteSistema().getPastaImagensUsuarioSistema()));
             } catch (IOException ex) {
-                log.error(ex.getMessage());
+                log.error("Um erro ocorreu {}",ex,ex.getMessage());
                 throw new NegocioException(HttpStatus.BAD_REQUEST,"Não foi possível fazer o upload da imagem!");
             }
             return Void.TYPE;
@@ -114,6 +115,15 @@ public class NovaContaClienteSistemaService {
 
     private boolean criarConta(ClienteSistema clienteSistema) {
         return BooleanUtils.isTrue(clienteSistema.getAtivo()) && BooleanUtils.isTrue(clienteSistema.getAcessarTelaCriarLogin()) && BooleanUtils.isTrue(clienteSistema.getPrimeiroAcesso());
+    }
+    
+    private void updateValidarCliente(String cpfCnpj) {
+        Optional<ValidarCliente> vcOptional = clienteRepository.findByCpfCnpj(cpfCnpj);
+        vcOptional.map(validarCliente -> {
+            validarCliente.setContaCriada(Boolean.TRUE);
+            clienteRepository.save(validarCliente);
+            return Void.TYPE;
+        }).orElseThrow(() -> new NegocioException(HttpStatus.NOT_FOUND,"Nenhum cliente cadastrado com esse CPF/CNPJ!"));
     }
 
 }

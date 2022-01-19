@@ -20,6 +20,7 @@ $(function () {
             window.location.href = $("#contextApp").val() + response;
           },
           error: function (xhr) {
+            window.localStorage.clear();
             if (xhr.responseJSON) {
               $("#cpfCnpj").focus();
               Swal.fire('Atenção!',`${xhr.responseJSON.message}`,'warning');
@@ -27,7 +28,6 @@ $(function () {
               $("#cpfCnpj").focus();
               Swal.fire('Atenção!',`${xhr.responseText}`,'warning');
             }
-            window.console.log(xhr);
           },
           beforeSend: function () {
             $("#divLoading").addClass("submitting");
