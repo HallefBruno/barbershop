@@ -42,21 +42,21 @@ public class ValidarClienteSistemaController {
     }
 
     @RequestMapping(path = {"novaConta"}, method = RequestMethod.GET)
-    public String pageNovaConta(@ModelAttribute("usuario") Usuario usuario) {
-        return "novaconta/CriarContaClienteSistema";
+    public ModelAndView pageNovaConta(@ModelAttribute("usuario") Usuario usuario) {
+        return new ModelAndView("novaconta/CriarContaClienteSistema");
     }
     
     @RequestMapping(path = {"criar/nova-conta"}, method = RequestMethod.POST)
     public ModelAndView salvar(@RequestParam("image") MultipartFile multipartFile, @Valid Usuario usuario, BindingResult result,RedirectAttributes attributes) {
         try {
             if (result.hasErrors()) {
-                pageNovaConta(usuario);
+                return pageNovaConta(usuario);
             }
             validarClienteService.criarPreContaUsuarioClienteSistema(multipartFile, usuario);
         } catch (NegocioException ex) {
             ObjectError error = new ObjectError("erro", ex.getReason());
             result.addError(error);
-            pageNovaConta(usuario);
+            return pageNovaConta(usuario);
             //result.rejectValue("nome", ex.getMessage(), ex.getReason());
         }
         return new ModelAndView("redirect:/conta-criada", HttpStatus.CREATED).addObject("resultado","Conta criada com sucesso!");

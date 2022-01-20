@@ -118,8 +118,9 @@ public class NovaContaClienteSistemaService {
     }
     
     private void updateValidarCliente(String cpfCnpj) {
-        Optional<ValidarCliente> vcOptional = clienteRepository.findByCpfCnpj(cpfCnpj);
-        vcOptional.map(validarCliente -> {
+        clienteRepository.findByCpfCnpj(cpfCnpj)
+        .filter(vc -> BooleanUtils.isTrue(vc.getContaCriada()))
+        .map(validarCliente -> {
             validarCliente.setContaCriada(Boolean.TRUE);
             clienteRepository.save(validarCliente);
             return Void.TYPE;
