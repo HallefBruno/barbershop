@@ -42,6 +42,8 @@
               <h5 class="card-header">Criar conta</h5>
               <div class="card-body">
                 <form th:action="@{/criar/nova-conta}" method="post" th:object="${usuario}" enctype="multipart/form-data">
+                  <th:block th:include="fragments/MensagemSucesso"></th:block>
+                  <th:block th:include="fragments/MensagemErro"></th:block>
                   <div class="text-center mb-3">
                     <img id="image-viewer" width="110px" height="110px" th:src="@{/vendor/imagens/avatar-default.jpg}" style="border-radius: 50%;" alt="Cliente"/>
                   </div>
@@ -139,6 +141,7 @@
     <script th:src="@{/vendor/js/jquery.mask.min.js}" type="text/javascript"></script>
     <script th:src="@{/vendor/js/sweetalert2.all.js}" type="text/javascript"></script>
     <script th:src="@{/vendor/js/pwstrength-bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendor/js/moment.min.js}" type="text/javascript"></script>
     <script th:src="@{/novaconta/nova.conta.cliente.js}" type="text/javascript"></script>
   </body>
 </html>

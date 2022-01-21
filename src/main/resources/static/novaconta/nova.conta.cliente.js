@@ -1,5 +1,5 @@
 
-/* global Swal */
+/* global Swal, moment */
 var submmit = false;
 
 $(function () {
@@ -57,6 +57,15 @@ $(function () {
   }
 
   $("#btnCriarConta").click(function () {
+    const somaAnoNascimento = moment().diff($("#dataNascimento").val(), 'years');
+    if(somaAnoNascimento < 16) {
+      Swal.fire('Atenção!', 'Data nascimento inválida!', 'warning');
+      $("form").submit(function () {
+        event.preventDefault();
+      });
+      return;
+    }
+    console.log(somaAnoNascimento);
     if (submmit === false || senhaPrincipal.val() !== senhaSecundaria.val()) {
       Swal.fire('Atenção!', 'As senhas não conferem!', 'warning');
       $("form").submit(function () {
@@ -78,8 +87,7 @@ $(function () {
       $("#btnCriarConta").addClass("btn btn-sm btn-outline-success");
     }
   });
-  
-  
+
   options = {
     common: {
       minChar: 11,
