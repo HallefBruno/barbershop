@@ -10,15 +10,14 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 public class LoginClienteService {
-    
-    private final LoginClienteRepository clienteRepository;
-    
-    
-    public void usuarioExistente(LoginCliente loginCliente) {
-        clienteRepository.findByEmailIgnoreCaseAndTelefone(loginCliente.getEmail(), loginCliente.getTelefone())
-        .map(usuario -> {
-            return Void.TYPE;
-        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-    
+
+  private final LoginClienteRepository clienteRepository;
+
+  public void usuarioExistente(LoginCliente loginCliente) {
+    clienteRepository.findByEmailIgnoreCaseAndTelefone(loginCliente.getEmail(), loginCliente.getTelefone())
+    .map(usuario -> {
+      return Void.TYPE;
+    }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+  }
+
 }

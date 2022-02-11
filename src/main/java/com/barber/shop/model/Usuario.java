@@ -33,82 +33,84 @@ import org.springframework.format.annotation.DateTimeFormat;
 @DynamicUpdate
 @EqualsAndHashCode
 public class Usuario implements Serializable {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @NotBlank(message = "Nome não pode ter espaços em branco!")
-    @NotEmpty(message = "Nome não pode ser vazio!")
-    @NotNull(message = "Nome não pode ser null!")
-    @Column(nullable = false, length = 100)
-    private String nome;
-    
-    @NotBlank(message = "Telefone não pode ter espaços em branco!")
-    @NotEmpty(message = "Telefone não pode ser vazio!")
-    @NotNull(message = "Telefone não pode ser null!")
-    @Column(nullable = false, length = 11)
-    private String telefone;
-    
-    @Email
-    @NotBlank(message = "Email não pode ter espaços em branco!")
-    @NotEmpty(message = "Email não pode ser vazio!")
-    @NotNull(message = "Email não pode ser null!")
-    @Column(nullable = false, length = 200, unique = true)
-    private String email;
-    
-    @NotBlank(message = "Senha não pode ter espaços em branco!")
-    @NotEmpty(message = "Senha não pode ser vazio!")
-    @NotNull(message = "Senha não pode ser null!")
-    @Column(nullable = false, length = 100)
-    private String senha;
-    
-    @Transient
-    @NotBlank(message = "Confirmar senha não pode ter espaços em branco!")
-    @NotEmpty(message = "Confirmar senha não pode ser vazio!")
-    @NotNull(message = "Confirmar senha não pode ser null!")
-    private String confirmaSenha;
-    
-    @Transient
-    @NotBlank(message = "CPF CNPJ não pode ter espaços em branco!")
-    @NotEmpty(message = "CPF CNPJ não pode ser vazio!")
-    @NotNull(message = "CPF CNPJ não pode ser null!")
-    private String cpfCnpj;
-    
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private Boolean ativo;
 
-    @Size(min = 1, message = "Selecione pelo menos um grupo")
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
-    private Set<Grupo> grupos;
-    
-    @JoinColumn(nullable = false)
-    @ManyToOne
-    private ClienteSistema clienteSistema;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "data_nascimento")
-    @DateTimeFormat(pattern="yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE)
-    private LocalDate dataNascimento;
-    
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private Boolean proprietario;
-    
-    @Column(nullable = false, name = "nome_foto", unique = true)
-    private String nomeFoto;
-    
-    @Column(nullable = false)
-    private String extensao;
-    
-    @PrePersist
-    @PreUpdate
-    private void prePersistPreUpdate() {
-        this.telefone = StringUtils.getDigits(this.telefone);
-        this.telefone = StringUtils.strip(this.telefone);
-        this.nome = StringUtils.strip(this.nome);
-        this.email = StringUtils.strip(this.email);
-        this.senha = StringUtils.strip(this.senha);
-        if(Objects.isNull(this.proprietario)) this.proprietario = false;
+  @NotBlank(message = "Nome não pode ter espaços em branco!")
+  @NotEmpty(message = "Nome não pode ser vazio!")
+  @NotNull(message = "Nome não pode ser null!")
+  @Column(nullable = false, length = 100)
+  private String nome;
+
+  @NotBlank(message = "Telefone não pode ter espaços em branco!")
+  @NotEmpty(message = "Telefone não pode ser vazio!")
+  @NotNull(message = "Telefone não pode ser null!")
+  @Column(nullable = false, length = 11)
+  private String telefone;
+
+  @Email
+  @NotBlank(message = "Email não pode ter espaços em branco!")
+  @NotEmpty(message = "Email não pode ser vazio!")
+  @NotNull(message = "Email não pode ser null!")
+  @Column(nullable = false, length = 200, unique = true)
+  private String email;
+
+  @NotBlank(message = "Senha não pode ter espaços em branco!")
+  @NotEmpty(message = "Senha não pode ser vazio!")
+  @NotNull(message = "Senha não pode ser null!")
+  @Column(nullable = false, length = 100)
+  private String senha;
+
+  @Transient
+  @NotBlank(message = "Confirmar senha não pode ter espaços em branco!")
+  @NotEmpty(message = "Confirmar senha não pode ser vazio!")
+  @NotNull(message = "Confirmar senha não pode ser null!")
+  private String confirmaSenha;
+
+  @Transient
+  @NotBlank(message = "CPF CNPJ não pode ter espaços em branco!")
+  @NotEmpty(message = "CPF CNPJ não pode ser vazio!")
+  @NotNull(message = "CPF CNPJ não pode ser null!")
+  private String cpfCnpj;
+
+  @Column(nullable = false, columnDefinition = "boolean default false")
+  private Boolean ativo;
+
+  @Size(min = 1, message = "Selecione pelo menos um grupo")
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
+  private Set<Grupo> grupos;
+
+  @JoinColumn(nullable = false)
+  @ManyToOne
+  private ClienteSistema clienteSistema;
+
+  @Column(name = "data_nascimento")
+  @DateTimeFormat(pattern = "yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE)
+  private LocalDate dataNascimento;
+
+  @Column(nullable = false, columnDefinition = "boolean default false")
+  private Boolean proprietario;
+
+  @Column(nullable = false, name = "nome_foto", unique = true)
+  private String nomeFoto;
+
+  @Column(nullable = false)
+  private String extensao;
+
+  @PrePersist
+  @PreUpdate
+  private void prePersistPreUpdate() {
+    this.telefone = StringUtils.getDigits(this.telefone);
+    this.telefone = StringUtils.strip(this.telefone);
+    this.nome = StringUtils.strip(this.nome);
+    this.email = StringUtils.strip(this.email);
+    this.senha = StringUtils.strip(this.senha);
+    if (Objects.isNull(this.proprietario)) {
+      this.proprietario = false;
     }
-    
+  }
+
 }

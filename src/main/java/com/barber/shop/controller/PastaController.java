@@ -19,30 +19,30 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class PastaController {
 
-    private final PastaService pastaService;
+  private final PastaService pastaService;
 
-    @GetMapping
-    public ModelAndView page(Pasta pasta) {
-        ModelAndView modelAndView = new ModelAndView("pasta/Nova");
-        modelAndView.addObject("listaPasta", pastaService.todas());
-        modelAndView.addObject("listaPastaNuvem", pastaService.getFoldersNuvem());
-        return modelAndView;
+  @GetMapping
+  public ModelAndView page(Pasta pasta) {
+    ModelAndView modelAndView = new ModelAndView("pasta/Nova");
+    modelAndView.addObject("listaPasta", pastaService.todas());
+    modelAndView.addObject("listaPastaNuvem", pastaService.getFoldersNuvem());
+    return modelAndView;
+  }
+
+  @PostMapping
+  public ModelAndView salvar(@Valid Pasta pasta, BindingResult result, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return page(pasta);
+      }
+      pastaService.salvar(pasta);
+    } catch (NegocioException ex) {
+      result.rejectValue("nome", ex.getMessage(), ex.getReason());
+      return page(pasta);
     }
+    attributes.addFlashAttribute("mensagem", "Nova pasta cadastrada!");
+    return new ModelAndView("redirect:/pasta", HttpStatus.CREATED);
 
-    @PostMapping
-    public ModelAndView salvar(@Valid Pasta pasta, BindingResult result, RedirectAttributes attributes) {
-        try {
-            if (result.hasErrors()) {
-                return page(pasta);
-            }
-            pastaService.salvar(pasta);
-        } catch (NegocioException ex) {
-            result.rejectValue("nome", ex.getMessage(), ex.getReason());
-            return page(pasta);
-        }
-        attributes.addFlashAttribute("mensagem", "Nova pasta cadastrada!");
-        return new ModelAndView("redirect:/pasta", HttpStatus.CREATED);
-
-    }
+  }
 
 }

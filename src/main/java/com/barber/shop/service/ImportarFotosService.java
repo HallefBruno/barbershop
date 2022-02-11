@@ -1,4 +1,3 @@
-
 package com.barber.shop.service;
 
 import com.barber.shop.exception.NegocioException;
@@ -20,49 +19,49 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 public class ImportarFotosService {
-    
-    private final ImportarFotosRepository importarFotosRepository;
-    private final UsuarioService usuarioService;
-    private final StorageCloudnary storageCloudnary;
-    
-    @Transactional
-    public void salvar(MultipartFile multipartFile) {
-        String cpfCnpj = usuarioService.getUsuarioLogado().getClienteSistema().getCpfCnpj();
-        String originalName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        Foto foto = new Foto();
-        foto.setCpfCnpj(cpfCnpj);
-        foto.setNomeFoto(UUID.randomUUID().toString());
-        foto.setOriginalName(originalName.substring(0, originalName.lastIndexOf(".")));
-        foto.setExtensao(extension);
-        try {
-            importarFotosRepository.findByNomeFotoIgnoreCase(foto.getNomeFoto()).ifPresent((t) -> {
-                throw new NegocioException(HttpStatus.BAD_REQUEST, "Essa foto já consta na base de dados!");
-            });
-            importarFotosRepository.save(foto);
-            storageCloudnary.uploadFotoCatalogo(multipartFile.getBytes(), foto.getNomeFoto());
-        } catch (IOException ex) {
-            storageCloudnary.deleteFotoCatalogo(foto.getNomeFoto());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
-        }
+
+  private final ImportarFotosRepository importarFotosRepository;
+  private final UsuarioService usuarioService;
+  private final StorageCloudnary storageCloudnary;
+
+  @Transactional
+  public void salvar(MultipartFile multipartFile) {
+    String cpfCnpj = usuarioService.getUsuarioLogado().getClienteSistema().getCpfCnpj();
+    String originalName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+    String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+    Foto foto = new Foto();
+    foto.setCpfCnpj(cpfCnpj);
+    foto.setNomeFoto(UUID.randomUUID().toString());
+    foto.setOriginalName(originalName.substring(0, originalName.lastIndexOf(".")));
+    foto.setExtensao(extension);
+    try {
+      importarFotosRepository.findByNomeFotoIgnoreCase(foto.getNomeFoto()).ifPresent((t) -> {
+        throw new NegocioException(HttpStatus.BAD_REQUEST, "Essa foto já consta na base de dados!");
+      });
+      importarFotosRepository.save(foto);
+      storageCloudnary.uploadFotoCatalogo(multipartFile.getBytes(), foto.getNomeFoto());
+    } catch (IOException ex) {
+      storageCloudnary.deleteFotoCatalogo(foto.getNomeFoto());
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
     }
-    
-    @Transactional
-    public void excluir(Long id) {
-        try {
-            importarFotosRepository.findById(id)
-            .map(foto -> {
-                importarFotosRepository.deleteByNomeFotoIgnoreCase(foto.getNomeFoto());
-                storageCloudnary.deleteFotoCatalogo(foto.getNomeFoto());
-                return Void.TYPE;
-            }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        } catch (NegocioException ex) {
-            throw new NegocioException(HttpStatus.BAD_REQUEST, ex.getReason());
-        }
+  }
+
+  @Transactional
+  public void excluir(Long id) {
+    try {
+      importarFotosRepository.findById(id)
+      .map(foto -> {
+        importarFotosRepository.deleteByNomeFotoIgnoreCase(foto.getNomeFoto());
+        storageCloudnary.deleteFotoCatalogo(foto.getNomeFoto());
+        return Void.TYPE;
+      }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    } catch (NegocioException ex) {
+      throw new NegocioException(HttpStatus.BAD_REQUEST, ex.getReason());
     }
-    
-    public List<Foto> findAllByCpfCnpj() {
-        return importarFotosRepository.findAllByCpfCnpj(usuarioService.getUsuarioLogado().getClienteSistema().getCpfCnpj());
-    }
-    
+  }
+
+  public List<Foto> findAllByCpfCnpj() {
+    return importarFotosRepository.findAllByCpfCnpj(usuarioService.getUsuarioLogado().getClienteSistema().getCpfCnpj());
+  }
+
 }

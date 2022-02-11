@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GrupoService {
-    
-    private final GrupoRepository grupoRepository;
-    
-    public List<Grupo> grupos() {
-        return grupoRepository.findAll();
-    }
-    
+
+  private final GrupoRepository grupoRepository;
+
+  public List<Grupo> grupos() {
+    return grupoRepository.findAll();
+  }
+
 }

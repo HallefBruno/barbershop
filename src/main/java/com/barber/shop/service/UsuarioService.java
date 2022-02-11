@@ -22,37 +22,37 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
-    private final StorageCloudnary storageCloudnary;
-    private final PasswordEncoder passwordEncoder;
+  private final UsuarioRepository usuarioRepository;
+  private final StorageCloudnary storageCloudnary;
+  private final PasswordEncoder passwordEncoder;
 
-    public Usuario getUsuarioLogado() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Usuario usuario = ((UsuarioSistema) authentication.getPrincipal()).getUsuario();
-        return usuario;
-    }
+  public Usuario getUsuarioLogado() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Usuario usuario = ((UsuarioSistema) authentication.getPrincipal()).getUsuario();
+    return usuario;
+  }
 
-    @Transactional
-    public void salvar(Usuario usuario, MultipartFile multipartFile) {
-        String nomeArquivo = "";
-        ClienteSistema clienteSistema = getUsuarioLogado().getClienteSistema();
-        if(verificarExisteUsuario(usuario, clienteSistema)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Esse usuário ja está cadastrado!");
-        }
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        usuario.setNomeFoto(fileName.substring(0, fileName.lastIndexOf(".")));
-        usuario.setExtensao(extension);
-        usuario.setClienteSistema(clienteSistema);
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-        Usuario novo = usuarioRepository.save(usuario);
-        nomeArquivo = novo.getId().toString() + "-" + usuario.getNomeFoto();
-        //storageCloudnary.uploadFotoUsuarioSistema(multipartFile.getBytes(), nomeArquivo);
+  @Transactional
+  public void salvar(Usuario usuario, MultipartFile multipartFile) {
+    String nomeArquivo = "";
+    ClienteSistema clienteSistema = getUsuarioLogado().getClienteSistema();
+    if (verificarExisteUsuario(usuario, clienteSistema)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Esse usuário ja está cadastrado!");
     }
+    String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+    String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+    usuario.setNomeFoto(fileName.substring(0, fileName.lastIndexOf(".")));
+    usuario.setExtensao(extension);
+    usuario.setClienteSistema(clienteSistema);
+    usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+    Usuario novo = usuarioRepository.save(usuario);
+    nomeArquivo = novo.getId().toString() + "-" + usuario.getNomeFoto();
+    //storageCloudnary.uploadFotoUsuarioSistema(multipartFile.getBytes(), nomeArquivo);
+  }
 
-    private boolean verificarExisteUsuario(Usuario usuario, ClienteSistema clienteSistema) {
-        Optional<Usuario> optional = usuarioRepository.findByEmailAndClienteSistema(usuario.getEmail(),clienteSistema);
-        return optional.isPresent();
-    }
+  private boolean verificarExisteUsuario(Usuario usuario, ClienteSistema clienteSistema) {
+    Optional<Usuario> optional = usuarioRepository.findByEmailAndClienteSistema(usuario.getEmail(), clienteSistema);
+    return optional.isPresent();
+  }
 
 }

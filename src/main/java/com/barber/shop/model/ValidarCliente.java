@@ -21,27 +21,27 @@ import org.hibernate.annotations.DynamicUpdate;
 @EqualsAndHashCode
 public class ValidarCliente implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, unique = true, nullable = false)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(updatable = false, unique = true, nullable = false)
+  private Long id;
 
-    @Column(name = "data_validacao", nullable = false)
-    private LocalDateTime dataValidacao;
+  @Column(name = "data_validacao", nullable = false)
+  private LocalDateTime dataValidacao;
 
-    @Column(name = "cpf_cnpj", nullable = false, unique = true)
-    private String cpfCnpj;
+  @Column(name = "cpf_cnpj", nullable = false, unique = true)
+  private String cpfCnpj;
 
-    @Column(name = "conta_criada", columnDefinition = "boolean default false")
-    private Boolean contaCriada;
+  @Column(name = "conta_criada", columnDefinition = "boolean default false")
+  private Boolean contaCriada;
 
-    @PrePersist
-    @PreUpdate
-    private void prePersistPreUpdate() {
-        this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
-        if (Objects.isNull(this.contaCriada)) {
-            this.contaCriada = Boolean.FALSE;
-        }
+  @PrePersist
+  @PreUpdate
+  private void prePersistPreUpdate() {
+    this.cpfCnpj = StringUtils.getDigits(this.cpfCnpj);
+    if (Objects.isNull(this.contaCriada)) {
+      this.contaCriada = Boolean.FALSE;
     }
+  }
 
 }

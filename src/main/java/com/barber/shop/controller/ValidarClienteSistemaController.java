@@ -24,41 +24,42 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class ValidarClienteSistemaController {
 
-    private final NovaContaClienteSistemaService validarClienteService;
+  private final NovaContaClienteSistemaService validarClienteService;
 
-    @RequestMapping(path = {"validar"}, method = RequestMethod.GET)
-    public String pageValidarCliente() {
-        return "novaconta/ValidarClienteSistema";
-    }
+  @RequestMapping(path = {"validar"}, method = RequestMethod.GET)
+  public String pageValidarCliente() {
+    return "novaconta/ValidarClienteSistema";
+  }
 
-    @GetMapping("validar/cliente")
-    public @ResponseBody ResponseEntity<?> clienteCadastrado(@RequestParam(name = "cpfCnpj") String cpfCnpj) {
-        try {
-            validarClienteService.validarClienteSistema(cpfCnpj);
-            return ResponseEntity.ok().body("novaConta");
-        } catch (NegocioException ex) {
-            return ResponseEntity.badRequest().body(ex.getReason());
-        }
+  @GetMapping("validar/cliente")
+  public @ResponseBody
+  ResponseEntity<?> clienteCadastrado(@RequestParam(name = "cpfCnpj") String cpfCnpj) {
+    try {
+      validarClienteService.validarClienteSistema(cpfCnpj);
+      return ResponseEntity.ok().body("novaConta");
+    } catch (NegocioException ex) {
+      return ResponseEntity.badRequest().body(ex.getReason());
     }
+  }
 
-    @RequestMapping(path = {"novaConta"}, method = RequestMethod.GET)
-    public ModelAndView pageNovaConta(@ModelAttribute("usuario") Usuario usuario) {
-        return new ModelAndView("novaconta/CriarContaClienteSistema");
+  @RequestMapping(path = {"novaConta"}, method = RequestMethod.GET)
+  public ModelAndView pageNovaConta(@ModelAttribute("usuario") Usuario usuario) {
+    return new ModelAndView("novaconta/CriarContaClienteSistema");
+  }
+
+  @RequestMapping(path = {"criar/nova-conta"}, method = RequestMethod.POST)
+  public ModelAndView salvar(@RequestParam("image") MultipartFile multipartFile, @Valid Usuario usuario, BindingResult result, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return pageNovaConta(usuario);
+      }
+      validarClienteService.criarPreContaUsuarioClienteSistema(multipartFile, usuario);
+    } catch (NegocioException ex) {
+      ObjectError error = new ObjectError("erro", ex.getReason());
+      result.addError(error);
+      return pageNovaConta(usuario);
+      //result.rejectValue("nome", ex.getMessage(), ex.getReason());
     }
-    
-    @RequestMapping(path = {"criar/nova-conta"}, method = RequestMethod.POST)
-    public ModelAndView salvar(@RequestParam("image") MultipartFile multipartFile, @Valid Usuario usuario, BindingResult result,RedirectAttributes attributes) {
-        try {
-            if (result.hasErrors()) {
-                return pageNovaConta(usuario);
-            }
-            validarClienteService.criarPreContaUsuarioClienteSistema(multipartFile, usuario);
-        } catch (NegocioException ex) {
-            ObjectError error = new ObjectError("erro", ex.getReason());
-            result.addError(error);
-            return pageNovaConta(usuario);
-            //result.rejectValue("nome", ex.getMessage(), ex.getReason());
-        }
-        return new ModelAndView("redirect:/conta-criada", HttpStatus.CREATED).addObject("resultado","Conta criada com sucesso!");
-    }
+    return new ModelAndView("redirect:/conta-criada", HttpStatus.CREATED).addObject("resultado", "Conta criada com sucesso!");
+  }
 }

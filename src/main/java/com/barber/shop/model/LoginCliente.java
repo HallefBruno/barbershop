@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginCliente {
-    
-    private String email;
-    private String telefone;
-    
+
+  private String email;
+  private String telefone;
+
 }

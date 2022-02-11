@@ -24,30 +24,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class NovoClienteController {
 
-    private final PasswordEncoder passwordEncoder;
-    private final ClienteService clienteService;
-    
+  private final PasswordEncoder passwordEncoder;
+  private final ClienteService clienteService;
 
-    @GetMapping
-    public ModelAndView pageInicial(Usuario cliente) {
-        return new ModelAndView("agendamento/NovaConta");
+  @GetMapping
+  public ModelAndView pageInicial(Usuario cliente) {
+    return new ModelAndView("agendamento/NovaConta");
+  }
+
+  @PostMapping("salvar")
+  public ModelAndView salvar(@RequestParam("image") MultipartFile multipartFile, @Valid Usuario cliente, BindingResult result, Model model, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return pageInicial(cliente);
+      }
+      cliente.setSenha(passwordEncoder.encode(cliente.getSenha()));
+      clienteService.salvar(cliente, multipartFile);
+    } catch (NegocioException ex) {
+      ObjectError error = new ObjectError("erro", ex.getMessage());
+      result.addError(error);
+      return pageInicial(cliente);
     }
-    
-    @PostMapping("salvar")
-    public ModelAndView salvar(@RequestParam("image") MultipartFile multipartFile, @Valid Usuario cliente, BindingResult result, Model model, RedirectAttributes attributes) {
-        try {
-            if (result.hasErrors()) {
-                return pageInicial(cliente);
-            }
-            cliente.setSenha(passwordEncoder.encode(cliente.getSenha()));
-            clienteService.salvar(cliente, multipartFile);
-        } catch (NegocioException ex) {
-            ObjectError error = new ObjectError("erro", ex.getMessage());
-            result.addError(error);
-            return pageInicial(cliente);
-        }
-        attributes.addFlashAttribute("mensagem", "Conta registrada com sucesso!");
-        return new ModelAndView("redirect:/agendamento", HttpStatus.CREATED);
-    }
+    attributes.addFlashAttribute("mensagem", "Conta registrada com sucesso!");
+    return new ModelAndView("redirect:/agendamento", HttpStatus.CREATED);
+  }
 
 }

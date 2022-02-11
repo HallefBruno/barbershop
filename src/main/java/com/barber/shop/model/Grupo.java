@@ -17,13 +17,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class Grupo implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nome;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  private String nome;
 
-    @ManyToMany
-    @JoinTable(name = "grupo_permissao", joinColumns = @JoinColumn(name = "id_grupo"), inverseJoinColumns = @JoinColumn(name = "id_permissao"))
-    private Set<Permissao> permissoes;
+  @ManyToMany
+  @JoinTable(name = "grupo_permissao", joinColumns = @JoinColumn(name = "id_grupo"), inverseJoinColumns = @JoinColumn(name = "id_permissao"))
+  private Set<Permissao> permissoes;
 
 }

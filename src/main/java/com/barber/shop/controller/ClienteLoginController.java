@@ -21,29 +21,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping(path = {"/login-cliente"})
 @RequiredArgsConstructor
 public class ClienteLoginController {
-    
-    private final LoginClienteRepository clienteRepository;
-    
-    @GetMapping
-    public ModelAndView pageLoginCliente(LoginCliente loginCliente) {
-        return new ModelAndView("LoginCliente");
+
+  private final LoginClienteRepository clienteRepository;
+
+  @GetMapping
+  public ModelAndView pageLoginCliente(LoginCliente loginCliente) {
+    return new ModelAndView("LoginCliente");
+  }
+
+  @PostMapping
+  public ModelAndView validarLoginUsuario(@Valid LoginCliente loginCliente, Model model, BindingResult result, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return pageLoginCliente(loginCliente);
+      }
+      if (clienteRepository.findByEmailIgnoreCaseAndTelefone(loginCliente.getEmail(), StringUtils.getDigits(loginCliente.getTelefone())).isPresent()) {
+        return new ModelAndView("redirect:/novo-agendamento", HttpStatus.OK);
+      }
+    } catch (NegocioException ex) {
+      ObjectError error = new ObjectError("erro", ex.getMessage());
+      result.addError(error);
+      return pageLoginCliente(loginCliente);
     }
-    
-    @PostMapping
-    public ModelAndView validarLoginUsuario(@Valid LoginCliente loginCliente, Model model,BindingResult result,RedirectAttributes attributes ) {
-        try {
-            if (result.hasErrors()) {
-                return pageLoginCliente(loginCliente);
-            }
-            if(clienteRepository.findByEmailIgnoreCaseAndTelefone(loginCliente.getEmail(), StringUtils.getDigits(loginCliente.getTelefone())).isPresent()) {
-                return new ModelAndView("redirect:/novo-agendamento", HttpStatus.OK);
-            }
-        } catch (NegocioException ex) {
-            ObjectError error = new ObjectError("erro", ex.getMessage());
-            result.addError(error);
-            return pageLoginCliente(loginCliente);
-        }
-        attributes.addFlashAttribute("mensagem", "Conta inexistente!");
-        return new ModelAndView("redirect:/login-cliente", HttpStatus.BAD_REQUEST);
-    }
+    attributes.addFlashAttribute("mensagem", "Conta inexistente!");
+    return new ModelAndView("redirect:/login-cliente", HttpStatus.BAD_REQUEST);
+  }
 }

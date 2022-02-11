@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClienteSistemaRepository extends JpaRepository<ClienteSistema, Long> {
-    Optional<ClienteSistema> findByCpfCnpj(String cnpj);
+
+  Optional<ClienteSistema> findByCpfCnpj(String cnpj);
 }

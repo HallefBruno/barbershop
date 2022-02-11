@@ -1,4 +1,3 @@
-
 package com.barber.shop.model;
 
 import java.io.Serializable;
@@ -15,16 +14,16 @@ import lombok.Data;
 @Table(name = "imagens_sistema")
 @SuppressWarnings("PersistenceUnitPresent")
 public class ImagensSistema implements Serializable {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, unique = true, nullable = false)
-    private Long id;
-    
-    @Column(nullable = false, name = "nome", unique = true, length = 100)
-    private String nome;
-    
-    @Column(nullable = false, length = 20, name = "extensao")
-    private String extensao;
-    
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(updatable = false, unique = true, nullable = false)
+  private Long id;
+
+  @Column(nullable = false, name = "nome", unique = true, length = 100)
+  private String nome;
+
+  @Column(nullable = false, length = 20, name = "extensao")
+  private String extensao;
+
 }

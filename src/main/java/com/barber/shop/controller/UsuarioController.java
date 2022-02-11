@@ -24,30 +24,30 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class UsuarioController {
 
-    private final GrupoService grupoService;
-    private final UsuarioService usuarioService;
+  private final GrupoService grupoService;
+  private final UsuarioService usuarioService;
 
-    @GetMapping
-    public ModelAndView pageNovo(Usuario usuario, Model model) {
-        model.addAttribute("grupos", grupoService.grupos());
-        model.addAttribute("clienteSistema", usuarioService.getUsuarioLogado().getClienteSistema());
-        return new ModelAndView("usuario/Novo");
-    }
+  @GetMapping
+  public ModelAndView pageNovo(Usuario usuario, Model model) {
+    model.addAttribute("grupos", grupoService.grupos());
+    model.addAttribute("clienteSistema", usuarioService.getUsuarioLogado().getClienteSistema());
+    return new ModelAndView("usuario/Novo");
+  }
 
-    @PostMapping
-    public ModelAndView salvar(@RequestParam("image") MultipartFile multipartFile, @Valid Usuario usuario, Model model, BindingResult result, RedirectAttributes attributes) {
-        try {
-            if (result.hasErrors()) {
-                return pageNovo(usuario, model);
-            }
-            usuarioService.salvar(usuario, multipartFile);
-        } catch (NegocioException ex) {
-            ObjectError error = new ObjectError("erro", ex.getMessage());
-            result.addError(error);
-            return pageNovo(usuario, model);
-        }
-        attributes.addFlashAttribute("mensagem", "Novo usuário cadastrado!");
-        return new ModelAndView("redirect:/usuario", HttpStatus.CREATED);
+  @PostMapping
+  public ModelAndView salvar(@RequestParam("image") MultipartFile multipartFile, @Valid Usuario usuario, Model model, BindingResult result, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return pageNovo(usuario, model);
+      }
+      usuarioService.salvar(usuario, multipartFile);
+    } catch (NegocioException ex) {
+      ObjectError error = new ObjectError("erro", ex.getMessage());
+      result.addError(error);
+      return pageNovo(usuario, model);
     }
+    attributes.addFlashAttribute("mensagem", "Novo usuário cadastrado!");
+    return new ModelAndView("redirect:/usuario", HttpStatus.CREATED);
+  }
 
 }

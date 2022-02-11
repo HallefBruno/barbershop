@@ -23,81 +23,81 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @ComponentScan(basePackageClasses = AppUserDetailsService.class)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
-    @Autowired
-    private UserDetailsService userDetailsService;
+  @Autowired
+  private UserDetailsService userDetailsService;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
-    
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-            .antMatchers("/vendor/**")
-            .antMatchers("/novaconta/**");
-    }
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/show/**").permitAll()
-                .antMatchers("/login-cliente/**").permitAll()
-                .antMatchers("/novo-agendamento/**").permitAll()
-                .antMatchers("/validar/**").permitAll()
-                .antMatchers("/novaConta/**").permitAll()
-                .antMatchers("/criar/nova-conta/**").permitAll()
-                .antMatchers("/conta-criada/**").permitAll()
-        .and()
-            .authorizeRequests()
-                .antMatchers("/dashboard/**").hasRole("DASHBOARD")
-                .antMatchers("/cliente-sistema/**").hasRole("SUPER_USER")
-                .antMatchers("/usuario/**").hasRole("MANTER_USUARIO")
-                .anyRequest().authenticated()
-        .and()
-            .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/dashboard")
-                .permitAll()
-        .and()
-            .logout().deleteCookies("JSESSIONID")
-            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-            .invalidateHttpSession(true)
-        .and()
-            .sessionManagement()
-                .maximumSessions(1).sessionRegistry(sessionRegistry())
-                .expiredUrl("/login")
-                .and()
-            .invalidSessionUrl("/login")
-        .and()
-            .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
-        .and()
-            .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400)
-        .and()
-            .rememberMe().rememberMeParameter("remember-me");
-    }
-    
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring()
+      .antMatchers("/vendor/**")
+      .antMatchers("/novaconta/**");
+  }
 
-    @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
-    }
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http
+      .authorizeRequests()
+        .antMatchers("/").permitAll()
+        .antMatchers("/show/**").permitAll()
+        .antMatchers("/login-cliente/**").permitAll()
+        .antMatchers("/novo-agendamento/**").permitAll()
+        .antMatchers("/validar/**").permitAll()
+        .antMatchers("/novaConta/**").permitAll()
+        .antMatchers("/criar/nova-conta/**").permitAll()
+        .antMatchers("/conta-criada/**").permitAll()
+    .and()
+      .authorizeRequests()
+        .antMatchers("/dashboard/**").hasRole("DASHBOARD")
+        .antMatchers("/cliente-sistema/**").hasRole("SUPER_USER")
+        .antMatchers("/usuario/**").hasRole("MANTER_USUARIO")
+        .anyRequest().authenticated()
+    .and()
+      .formLogin()
+        .loginPage("/login")
+        .defaultSuccessUrl("/dashboard")
+        .permitAll()
+    .and()
+      .logout().deleteCookies("JSESSIONID")
+      .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+      .invalidateHttpSession(true)
+    .and()
+      .sessionManagement()
+        .maximumSessions(1).sessionRegistry(sessionRegistry())
+        .expiredUrl("/login")
+        .and()
+        .invalidSessionUrl("/login")
+    .and()
+      .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+    .and()
+      .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400)
+    .and()
+      .rememberMe().rememberMeParameter("remember-me");
+  }
     
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public SessionRegistry sessionRegistry() {
+    return new SessionRegistryImpl();
+  }
+
+  @Bean
+  public HttpSessionEventPublisher httpSessionEventPublisher() {
+    return new HttpSessionEventPublisher();
+  }
+
+  @Bean
+  public AccessDeniedHandler accessDeniedHandler() {
+    return new CustomAccessDeniedHandler();
+  }
 
 }
 

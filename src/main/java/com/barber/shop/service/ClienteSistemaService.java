@@ -14,17 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ClienteSistemaService {
 
-    private final ClienteSistemaRepository clienteSistemaRepository;
-    private final StorageCloudnary storageCloudnary;
+  private final ClienteSistemaRepository clienteSistemaRepository;
+  private final StorageCloudnary storageCloudnary;
 
-    @Transactional
-    public void salvar(ClienteSistema clienteSistema) {
-        String cnpj = StringUtils.getDigits(clienteSistema.getCpfCnpj());
-        clienteSistemaRepository.findByCpfCnpj(cnpj).ifPresent((t) -> {
-            throw new NegocioException(HttpStatus.BAD_REQUEST, "Esse CPF/CNPJ já consta na base de dados!");
-        });
-        clienteSistemaRepository.save(clienteSistema);
-        storageCloudnary.createFolders(clienteSistema);
-    }
+  @Transactional
+  public void salvar(ClienteSistema clienteSistema) {
+    String cnpj = StringUtils.getDigits(clienteSistema.getCpfCnpj());
+    clienteSistemaRepository.findByCpfCnpj(cnpj).ifPresent((t) -> {
+      throw new NegocioException(HttpStatus.BAD_REQUEST, "Esse CPF/CNPJ já consta na base de dados!");
+    });
+    clienteSistemaRepository.save(clienteSistema);
+    storageCloudnary.createFolders(clienteSistema);
+  }
 
 }

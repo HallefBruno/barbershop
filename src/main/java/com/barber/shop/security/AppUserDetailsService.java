@@ -18,21 +18,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class AppUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+  @Autowired
+  private UsuarioRepository usuarioRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmailAndAtivoTrue(email);
-        Usuario usuario = usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário e/ou senha incorretos"));
-        return new UsuarioSistema(usuario, getPermissoes(usuario));
-    }
+  @Override
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    Optional<Usuario> usuarioOptional = usuarioRepository.findByEmailAndAtivoTrue(email);
+    Usuario usuario = usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário e/ou senha incorretos"));
+    return new UsuarioSistema(usuario, getPermissoes(usuario));
+  }
 
-    private Collection<? extends GrantedAuthority> getPermissoes(Usuario usuario) {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        List<String> permissoes = usuarioRepository.permissoes(usuario);
-        permissoes.forEach(p -> authorities.add(new SimpleGrantedAuthority(p.toUpperCase())));
-        return authorities;
-    }
+  private Collection<? extends GrantedAuthority> getPermissoes(Usuario usuario) {
+    Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+    List<String> permissoes = usuarioRepository.permissoes(usuario);
+    permissoes.forEach(p -> authorities.add(new SimpleGrantedAuthority(p.toUpperCase())));
+    return authorities;
+  }
 
 }

@@ -23,36 +23,36 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class ClienteSistemaController {
 
-    private final ClienteSistemaService clienteSistemaService;
-    private final ImagensSistemaRepository imagensSistemaRepository;
-    private final NegocioService negocioService;
-    private final StorageCloudnary storageCloudnary;
+  private final ClienteSistemaService clienteSistemaService;
+  private final ImagensSistemaRepository imagensSistemaRepository;
+  private final NegocioService negocioService;
+  private final StorageCloudnary storageCloudnary;
 
-    @GetMapping("/novo")
-    public ModelAndView index(ClienteSistema clienteSistema) {
-        ModelAndView mv = new ModelAndView("clientesistema/Novo");
-        mv.addObject("clienteSistema", clienteSistema);
-        mv.addObject("listNegocios", negocioService.todos());
-        mv.addObject("listFolders", storageCloudnary.getFoldersCloudnary());
-        mv.addObject("imagensSistema", imagensSistemaRepository.findAll());
-        return mv;
-    }
+  @GetMapping("/novo")
+  public ModelAndView index(ClienteSistema clienteSistema) {
+    ModelAndView mv = new ModelAndView("clientesistema/Novo");
+    mv.addObject("clienteSistema", clienteSistema);
+    mv.addObject("listNegocios", negocioService.todos());
+    mv.addObject("listFolders", storageCloudnary.getFoldersCloudnary());
+    mv.addObject("imagensSistema", imagensSistemaRepository.findAll());
+    return mv;
+  }
 
-    @PostMapping("/salvar")
-    public ModelAndView salvar(@Valid ClienteSistema clienteSistema, BindingResult result, RedirectAttributes attributes) {
-        try {
-            if (result.hasErrors()) {
-                return index(clienteSistema);
-            }
-            clienteSistemaService.salvar(clienteSistema);
-        } catch (NegocioException ex) {
-            ObjectError error = new ObjectError("erro", ex.getReason());
-            //result.rejectValue("erro", e.getMessage(), e.getMessage());
-            result.addError(error);
-            return index(clienteSistema);
-        }
-        attributes.addFlashAttribute("mensagem", "Novo cliente cadastrado!");
-        return new ModelAndView("redirect:/cliente-sistema/novo", HttpStatus.CREATED);
+  @PostMapping("/salvar")
+  public ModelAndView salvar(@Valid ClienteSistema clienteSistema, BindingResult result, RedirectAttributes attributes) {
+    try {
+      if (result.hasErrors()) {
+        return index(clienteSistema);
+      }
+      clienteSistemaService.salvar(clienteSistema);
+    } catch (NegocioException ex) {
+      ObjectError error = new ObjectError("erro", ex.getReason());
+      //result.rejectValue("erro", e.getMessage(), e.getMessage());
+      result.addError(error);
+      return index(clienteSistema);
     }
+    attributes.addFlashAttribute("mensagem", "Novo cliente cadastrado!");
+    return new ModelAndView("redirect:/cliente-sistema/novo", HttpStatus.CREATED);
+  }
 
 }

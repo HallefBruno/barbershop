@@ -26,37 +26,37 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class ImportarFotosController {
 
-    private final UsuarioService usuarioService;
-    private final ImportarFotosService importarFotosService;
+  private final UsuarioService usuarioService;
+  private final ImportarFotosService importarFotosService;
 
-    @GetMapping
-    public ModelAndView pageNovo(Foto foto) {
-        ModelAndView mv = new ModelAndView("catalogo/ImportarFotos");
-        mv.addObject("clienteSistema", usuarioService.getUsuarioLogado().getClienteSistema());
-        mv.addObject("listaFotos", importarFotosService.findAllByCpfCnpj());
-        return mv;
-    }
+  @GetMapping
+  public ModelAndView pageNovo(Foto foto) {
+    ModelAndView mv = new ModelAndView("catalogo/ImportarFotos");
+    mv.addObject("clienteSistema", usuarioService.getUsuarioLogado().getClienteSistema());
+    mv.addObject("listaFotos", importarFotosService.findAllByCpfCnpj());
+    return mv;
+  }
 
-    @PostMapping
-    public ModelAndView salvar(@Valid Foto foto, @RequestParam("image") MultipartFile multipartFile, BindingResult result, RedirectAttributes attributes) {
-        try {
-            importarFotosService.salvar(multipartFile);
-        } catch (NegocioException ex) {
-            result.rejectValue("nomeFoto", ex.getReason(), ex.getMessage());
-            return pageNovo(foto);
-        }
-        attributes.addFlashAttribute("mensagem", "Foto salva com sucesso!");
-        return new ModelAndView("redirect:/importar-fotos", HttpStatus.CREATED);
+  @PostMapping
+  public ModelAndView salvar(@Valid Foto foto, @RequestParam("image") MultipartFile multipartFile, BindingResult result, RedirectAttributes attributes) {
+    try {
+      importarFotosService.salvar(multipartFile);
+    } catch (NegocioException ex) {
+      result.rejectValue("nomeFoto", ex.getReason(), ex.getMessage());
+      return pageNovo(foto);
     }
-    
-    @ResponseBody
-    @DeleteMapping("/{codigo}")
-    public ResponseEntity<?> excluir(@PathVariable("codigo") Long codigo) {
-        try {
-            importarFotosService.excluir(codigo);
-        } catch (NegocioException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-        return ResponseEntity.noContent().build();
+    attributes.addFlashAttribute("mensagem", "Foto salva com sucesso!");
+    return new ModelAndView("redirect:/importar-fotos", HttpStatus.CREATED);
+  }
+
+  @ResponseBody
+  @DeleteMapping("/{codigo}")
+  public ResponseEntity<?> excluir(@PathVariable("codigo") Long codigo) {
+    try {
+      importarFotosService.excluir(codigo);
+    } catch (NegocioException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
+    return ResponseEntity.noContent().build();
+  }
 }

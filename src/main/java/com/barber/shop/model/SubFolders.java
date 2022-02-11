@@ -1,4 +1,3 @@
-
 package com.barber.shop.model;
 
 import lombok.AllArgsConstructor;
@@ -11,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SubFolders {
-    
-    private String path;
-    private String name;
-    
+
+  private String path;
+  private String name;
+
 }

@@ -9,10 +9,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/novo-agendamento")
 public class AgendamentoController {
-    
-    @GetMapping
-    public ModelAndView pageAgendamento(LoginCliente loginCliente) {
-        return new ModelAndView("agendamento/Novo");
-    }
-    
+
+  @GetMapping
+  public ModelAndView pageAgendamento(LoginCliente loginCliente) {
+    return new ModelAndView("agendamento/Novo");
+  }
+
 }

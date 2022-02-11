@@ -9,11 +9,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginController {
 
-    @GetMapping("/login")
-    public ModelAndView login(@AuthenticationPrincipal User user) {
-        if (user != null) {
-            return new ModelAndView("redirect:/dashboard");
-        }
-        return new ModelAndView("Login");
+  @GetMapping("/login")
+  public ModelAndView login(@AuthenticationPrincipal User user) {
+    if (user != null) {
+      return new ModelAndView("redirect:/dashboard");
     }
+    return new ModelAndView("Login");
+  }
 }

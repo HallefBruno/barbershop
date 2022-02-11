@@ -20,22 +20,22 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 @SuppressWarnings("PersistenceUnitPresent")
 public class Pasta implements Serializable {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, unique = true, nullable = false)
-    private Long id;
-    
-    @NotBlank(message = "Nome da pasta não pode ter espaços em branco!")
-    @NotEmpty(message = "Nome da pasta não pode ser vazio!")
-    @NotNull(message = "Nome da pasta não pode ser null!")
-    @Column(name = "nome", nullable = false, unique = true, length = 150)
-    private String nome;
-    
-    @PrePersist
-    @PreUpdate
-    private void prePersistPreUpdate() {
-        this.nome = StringUtils.strip(this.nome);
-    }
-    
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(updatable = false, unique = true, nullable = false)
+  private Long id;
+
+  @NotBlank(message = "Nome da pasta não pode ter espaços em branco!")
+  @NotEmpty(message = "Nome da pasta não pode ser vazio!")
+  @NotNull(message = "Nome da pasta não pode ser null!")
+  @Column(name = "nome", nullable = false, unique = true, length = 150)
+  private String nome;
+
+  @PrePersist
+  @PreUpdate
+  private void prePersistPreUpdate() {
+    this.nome = StringUtils.strip(this.nome);
+  }
+
 }

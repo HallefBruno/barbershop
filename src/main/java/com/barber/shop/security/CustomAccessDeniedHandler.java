@@ -12,15 +12,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
-    
-    public static final Logger LOG = Logger.getLogger(CustomAccessDeniedHandler.class.getName());
-    
-    @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response,AccessDeniedException exc) throws IOException, ServletException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            LOG.log(Level.WARNING, "User: {0} tentou acessar o URL protegido: {1}", new Object[]{auth.getName(), request.getRequestURI()});
-        }
-        response.sendRedirect(request.getContextPath() + "/403");
+
+  public static final Logger LOG = Logger.getLogger(CustomAccessDeniedHandler.class.getName());
+
+  @Override
+  public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exc) throws IOException, ServletException {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth != null) {
+      LOG.log(Level.WARNING, "User: {0} tentou acessar o URL protegido: {1}", new Object[]{auth.getName(), request.getRequestURI()});
     }
+    response.sendRedirect(request.getContextPath() + "/403");
+  }
 }

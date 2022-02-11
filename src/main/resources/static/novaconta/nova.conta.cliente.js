@@ -65,7 +65,6 @@ $(function () {
       });
       return;
     }
-    console.log(somaAnoNascimento);
     if (submmit === false || senhaPrincipal.val() !== senhaSecundaria.val()) {
       Swal.fire('Atenção!', 'As senhas não conferem!', 'warning');
       $("form").submit(function () {
@@ -73,11 +72,16 @@ $(function () {
       });
       return;
     }
+    
     if (!$("form").get(0).checkValidity()) {
       $("#divLoading").removeClass("submitting");
+      return;
     } else {
       $("#divLoading").addClass("submitting");
     }
+    
+    $("form").submit();
+    
   });
 
   $("#confirmaSenha").keyup(function () {

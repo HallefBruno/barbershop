@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PastaRepository extends JpaRepository<Pasta, Long> {
-    Optional<Pasta> findByNomeIgnoreCase(String nome);
+
+  Optional<Pasta> findByNomeIgnoreCase(String nome);
 }
